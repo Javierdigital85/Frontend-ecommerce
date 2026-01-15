@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Forzar cursor pointer en botones y todo su contenido */
+button,
+button * {
+  cursor: pointer !important;
+}
+
+a,
+a * {
+  cursor: pointer !important;
+}
