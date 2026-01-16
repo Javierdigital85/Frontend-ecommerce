@@ -6,8 +6,10 @@ import { createOrder } from "../services/orderService";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 
+import type { ShippingInfo } from "../interfaces/Order";
+
 const Checkout = () => {
-  const { cart, total, clearCart, loading: cartLoading } = useCart();
+  const { cart, total, loading: cartLoading } = useCart();
   const { userInfo, isAuthenticated, loading: userLoading } = useUser();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -25,17 +27,19 @@ const Checkout = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<ShippingInfo>({
     defaultValues: {
       firstName: userInfo?.username || "",
       lastName: "",
       email: userInfo?.email || "",
       phone: "",
-      street: "",
-      number: "",
-      city: "",
-      state: "",
-      zipCode: "",
+      address: {
+        street: "",
+        number: "",
+        city: "",
+        state: "",
+        zipCode: "",
+      },
     },
     mode: "onChange",
   });
@@ -57,33 +61,31 @@ const Checkout = () => {
     return null;
   }
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: ShippingInfo) => {
     setLoading(true);
 
     try {
       // Prepara los datos para el backend
       const orderData = {
-        items: cart.map((item) => ({
-          id: item._id,
-          title: item.name,
+        products: cart.map((item) => ({
+          productId: item._id,
+          name: item.name,
+          price: item.price,
           quantity: item.quantity || 1,
-          unit_price: item.price,
-          currency_id: "ARS",
+          imageUrl: item.imageUrl,
         })),
-        payer: {
-          email: data.email,
-        },
+        totalAmount: total,
         shippingInfo: {
           firstName: data.firstName,
           lastName: data.lastName,
           email: data.email,
           phone: data.phone,
           address: {
-            street: data.street,
-            number: data.number,
-            city: data.city,
-            state: data.state,
-            zipCode: data.zipCode,
+            street: data.address.street,
+            number: data.address.number,
+            city: data.address.city,
+            state: data.address.state,
+            zipCode: data.address.zipCode,
           },
         },
       };
@@ -106,7 +108,7 @@ const Checkout = () => {
       } else {
         throw new Error("No se recibio URL de pago");
       }
-    } catch (error) {
+    } catch {
       toast.error("Error al procesar la orden intente más tarde");
     } finally {
       setLoading(false);
@@ -259,7 +261,7 @@ const Checkout = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
               <div className="md:col-span-2">
                 <input
-                  {...register("street", {
+                  {...register("address.street", {
                     required: "La calle es requerida",
                     minLength: {
                       value: 3,
@@ -271,7 +273,7 @@ const Checkout = () => {
                     },
                   })}
                   className={`p-2 outline-2 border rounded focus:outline-primary w-full ${
-                    errors.street
+                  errors.address?.street
                       ? "border-red-400 outline-red-400 focus:outline-red-400"
                       : ""
                   }`}
@@ -279,15 +281,15 @@ const Checkout = () => {
                   placeholder="Calle"
                   autoComplete="address"
                 />
-                {errors.street && (
+                {errors.address?.street && (
                   <p className="text-red-500 text-sm mt-2 ml-1">
-                    {errors.street.message}
+                    {errors.address.street.message}
                   </p>
                 )}
               </div>
               <div>
                 <input
-                  {...register("number", {
+                  {...register("address.number", {
                     required: "El número es requerido",
                     pattern: {
                       value: /^[0-9]+$/,
@@ -303,7 +305,7 @@ const Checkout = () => {
                     },
                   })}
                   className={`p-2 outline-2 border rounded focus:outline-primary w-full ${
-                    errors.number
+                    errors.address?.number
                       ? "border-red-400 outline-red-400 focus:outline-red-400"
                       : ""
                   }`}
@@ -311,9 +313,9 @@ const Checkout = () => {
                   placeholder="Número"
                   autoComplete="address"
                 />
-                {errors.number && (
+                {errors.address?.number && (
                   <p className="text-red-500 text-sm mt-2 ml-1">
-                    {errors.number.message}
+                    {errors.address.number.message}
                   </p>
                 )}
               </div>
@@ -322,7 +324,7 @@ const Checkout = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
               <div>
                 <input
-                  {...register("city", {
+                  {...register("address.city", {
                     required: "La ciudad es requerida",
                     minLength: {
                       value: 3,
@@ -338,7 +340,7 @@ const Checkout = () => {
                     },
                   })}
                   className={`p-2 outline-2 border rounded focus:outline-primary w-full ${
-                    errors.city
+                    errors.address?.city
                       ? "border-red-400 outline-red-400 focus:outline-red-400"
                       : ""
                   }`}
@@ -346,16 +348,16 @@ const Checkout = () => {
                   placeholder="Ciudad"
                   autoComplete="address"
                 />
-                {errors.city && (
+                {errors.address?.city && (
                   <p className="text-red-500 text-sm mt-2 ml-1">
-                    {errors.city.message}
+                    {errors.address.city.message}
                   </p>
                 )}
               </div>
 
               <div>
                 <input
-                  {...register("state", {
+                  {...register("address.state", {
                     required: "La provincia es requerida",
                     minLength: {
                       value: 3,
@@ -371,7 +373,7 @@ const Checkout = () => {
                     },
                   })}
                   className={`p-2 outline-2 border rounded focus:outline-primary w-full ${
-                    errors.state
+                    errors.address?.state
                       ? "border-red-400 outline-red-400 focus:outline-red-400"
                       : ""
                   }`}
@@ -379,9 +381,9 @@ const Checkout = () => {
                   placeholder="Provincia"
                   autoComplete="address"
                 />
-                {errors.state && (
+                {errors.address?.state && (
                   <p className="text-red-500 text-sm mt-2 ml-1">
-                    {errors.state.message}
+                    {errors.address.state.message}
                   </p>
                 )}
               </div>
@@ -389,7 +391,7 @@ const Checkout = () => {
 
             <div>
               <input
-                {...register("zipCode", {
+                {...register("address.zipCode", {
                   required: "El código postal es requerido",
                   pattern: {
                     value: /^[0-9]+$/,
@@ -405,7 +407,7 @@ const Checkout = () => {
                   },
                 })}
                 className={`p-2 outline-2 border rounded focus:outline-primary w-full ${
-                  errors.zipCode
+                  errors.address?.zipCode
                     ? "border-red-400 outline-red-400 focus:outline-red-400"
                     : ""
                 }`}
@@ -413,9 +415,9 @@ const Checkout = () => {
                 placeholder="Código Postal"
                 autoComplete="postal-code"
               />
-              {errors.zipCode && (
+              {errors.address?.zipCode && (
                 <p className="text-red-500 text-sm mt-2 ml-1">
-                  {errors.zipCode.message}
+                  {errors.address.zipCode.message}
                 </p>
               )}
             </div>

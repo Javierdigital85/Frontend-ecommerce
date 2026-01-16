@@ -9,39 +9,53 @@ const DetailProduct = () => {
   const { addToCart, openModal } = useCart();
 
   useEffect(() => {
-    getProductById(id);
+    if (id) {
+      getProductById(id);
+    }
   }, [id, getProductById]);
 
   const handleAddToCart = async () => {
-    await addToCart(product);
-    openModal();
+    if (product) {
+      await addToCart({ ...product, quantity: 1 });
+      openModal();
+    }
   };
 
+  if (productLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-xl">Producto no encontrado</p>
+      </div>
+    );
+  }
+
   return (
-    <>
-      {productLoading ? (
-        <div className="loading loading-spinner"></div>
-      ) : (
-        <div className="mt-6 md:flex md:gap-8 ">
-          <div className="md:w-1/2">
-            <img src={product.imageUrl} alt={product.name} />
-          </div>
-          <section className="flex flex-col gap-5 pt-2 md:pt-0 md:pl-0 md:w-1/2">
-            <h1 className="text-5xl font-bold">{product.name}</h1>
-            <p className="text-xl badge badge-warning p-4 font-bold">
-              {product.price}
-            </p>
-            <p className="text-lg">{product.description}</p>
-            <button
-              onClick={handleAddToCart}
-              className="btn bg-success text-success-content hover:brightness-90 btn-sm md:btn-md p-2"
-            >
-              Agregar al carrito
-            </button>
-          </section>
-        </div>
-      )}
-    </>
+    <div className="mt-6 md:flex md:gap-8 ">
+      <div className="md:w-1/2">
+        <img src={product.imageUrl} alt={product.name} />
+      </div>
+      <section className="flex flex-col gap-5 pt-2 md:pt-0 md:pl-0 md:w-1/2">
+        <h1 className="text-5xl font-bold">{product.name}</h1>
+        <p className="text-xl badge badge-warning p-4 font-bold">
+          {product.price}
+        </p>
+        <p className="text-lg">{product.description}</p>
+        <button
+          onClick={handleAddToCart}
+          className="btn bg-success text-success-content hover:brightness-90 btn-sm md:btn-md p-2"
+        >
+          Agregar al carrito
+        </button>
+      </section>
+    </div>
   );
 };
 

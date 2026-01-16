@@ -9,7 +9,9 @@ const Cart = () => {
 
   const handleViewCart = () => {
     // Cerrar el dropdown quitando el focus
-    document.activeElement.blur();
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
 
     //Abrir el modal
     openModal();

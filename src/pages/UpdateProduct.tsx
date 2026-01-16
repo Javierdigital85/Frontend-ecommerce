@@ -10,19 +10,33 @@ const UpdateProduct = () => {
   const { getProductById, product, productLoading } = useProduct();
 
   useEffect(() => {
-    getProductById(id);
+    if (id) {
+      getProductById(id);
+    }
   }, [id, getProductById]);
+
+  if (productLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-xl">Producto no encontrado</p>
+      </div>
+    );
+  }
 
   return (
     <div>
       <h1 className="text-3xl font-bold text-center my-10">
         Actualizar producto
       </h1>
-      {productLoading ? (
-        <div className="loading loading-spinner"></div>
-      ) : (
-        <UpdateProductForm product={product} />
-      )}
+      <UpdateProductForm product={product} />
     </div>
   );
 };

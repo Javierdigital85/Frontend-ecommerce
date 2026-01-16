@@ -30,7 +30,7 @@ const RegisterForm = () => {
       checkSession
     );
 
-    if (result.message) {
+    if (result?.message) {
       toast.success("Registro existoso!");
     } else {
       toast.error("Error al registrarse");

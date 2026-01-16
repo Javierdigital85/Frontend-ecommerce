@@ -25,7 +25,7 @@ const LoginForm = () => {
 
     if (result?.success) {
       toast.success(result.message);
-    } else {
+    } else if (result) {
       toast.error(result.message);
     }
   };

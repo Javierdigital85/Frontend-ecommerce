@@ -1,7 +1,8 @@
 import { useUser } from "../../context/useUser";
 import { Navigate } from "react-router";
+import type { ReactNode } from "react";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const { userInfo, loading } = useUser();
 
   console.log(userInfo, loading, "ProtectedRoute");

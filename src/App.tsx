@@ -14,7 +14,7 @@ import Checkout from "./pages/Checkout";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFailure from "./pages/PaymentFailure";
 import PaymentPending from "./pages/PaymentPending";
-import UserProfile from "./components/profile/userProfile";
+import UserProfile from "./components/profile/UserProfile";
 
 function App() {
   return (
