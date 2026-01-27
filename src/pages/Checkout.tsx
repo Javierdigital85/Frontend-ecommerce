@@ -70,7 +70,7 @@ const Checkout = () => {
         products: cart.map((item) => ({
           productId: item._id,
           name: item.name,
-          price: item.price,
+          price: item.discountedPrice || item.price,
           quantity: item.quantity || 1,
           imageUrl: item.imageUrl,
         })),
@@ -458,11 +458,29 @@ const Checkout = () => {
                     <p className="text-sm text-gray-500">
                       Cantidad: {item.quantity || 1}
                     </p>
+                    {item.discountPercentage && item.discountPercentage > 0 && (
+                      <p className="text-xs text-green-600">
+                        Descuento: -{item.discountPercentage}%
+                      </p>
+                    )}
                   </div>
                 </div>
-                <span className="font-semibold">
-                  {item.price * (item.quantity || 1)}
-                </span>
+                <div className="text-right">
+                  {item.discountPercentage && item.discountPercentage > 0 ? (
+                    <>
+                      <span className="text-sm line-through text-gray-500 block">
+                        ${item.price * (item.quantity || 1)}
+                      </span>
+                      <span className="font-semibold text-red-600">
+                        ${(item.discountedPrice || item.price) * (item.quantity || 1)}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="font-semibold">
+                      ${item.price * (item.quantity || 1)}
+                    </span>
+                  )}
+                </div>
               </div>
             ))}
             <div className="border-t pt-4">

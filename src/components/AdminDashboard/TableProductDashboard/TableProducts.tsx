@@ -2,13 +2,16 @@ import { Link } from "react-router";
 import { useProduct } from "../../../context/useProduct";
 import toast from "react-hot-toast";
 import type { Product } from "../../../interfaces/Product";
+import { useState } from "react";
+import { applyDiscountService } from "../../../services/productService";
 
 interface TableProductsProps {
   products: Product[];
 }
 
 const TableProducts = ({ products }: TableProductsProps) => {
-  const { deleteProduct } = useProduct();
+  const { deleteProduct, getProducts } = useProduct();
+  const [discountInputs, setDiscountInputs] = useState<{[key: string]: string}>({});
 
   const handleDelete = async (id: string) => {
     const result = await deleteProduct(id);
@@ -20,6 +23,29 @@ const TableProducts = ({ products }: TableProductsProps) => {
       toast.error(result.message);
     }
   };
+
+  const handleDiscountChange = (productId: string, value: string) => {
+    setDiscountInputs(prev => ({ ...prev, [productId]: value }));
+  };
+
+  const applyDiscount = async (productId: string) => {
+    const discount = parseFloat(discountInputs[productId] || "0");
+    if (discount < 0 || discount > 100) {
+      toast.error("El descuento debe estar entre 0 y 100");
+      return;
+    }
+    
+    try {
+      await applyDiscountService(productId, discount);
+      toast.success("Descuento aplicado exitosamente");
+      getProducts();
+      setDiscountInputs(prev => ({ ...prev, [productId]: "" }));
+    } catch (error) {
+      console.error(error)
+      toast.error("Error al aplicar descuento");
+    }
+  };
+
   return (
     <table className="table text-center">
       <thead>
@@ -28,6 +54,7 @@ const TableProducts = ({ products }: TableProductsProps) => {
           <th>Name</th>
           <th className="max-w-xs">Description</th>
           <th>Price</th>
+          <th>Discount</th>
           <th>Stock</th>
           <th className="max-w-[200px]">Image</th>
           <th>Edit</th>
@@ -44,7 +71,41 @@ const TableProducts = ({ products }: TableProductsProps) => {
                 {product.description}
               </div>
             </td>
-            <td>{product.price}</td>
+            <td>
+              {(product.discountPercentage ?? 0) > 0 ? (
+                <div>
+                  <span className="line-through text-gray-500">${product.price}</span>
+                  <br />
+                  <span className="text-red-600 font-bold">${product.discountedPrice}</span>
+                </div>
+              ) : (
+                `$${product.price}`
+              )}
+            </td>
+            <td>
+              <div className="flex items-center gap-1">
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  placeholder="%"
+                  className="input input-sm w-16"
+                  value={discountInputs[product._id] || ""}
+                  onChange={(e) => handleDiscountChange(product._id, e.target.value)}
+                />
+                <button
+                  className="btn btn-sm btn-primary"
+                  onClick={() => applyDiscount(product._id)}
+                >
+                  Apply
+                </button>
+              </div>
+              {(product.discountPercentage ?? 0) > 0 && (
+                <div className="text-xs text-green-600 mt-1">
+                  {product.discountPercentage}% OFF
+                </div>
+              )}
+            </td>
             <td>{product.stock}</td>
             <td className="max-w-[200px]">
               <div className="truncate" title={product.imageUrl}>

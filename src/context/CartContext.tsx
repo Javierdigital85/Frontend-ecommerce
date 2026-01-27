@@ -57,6 +57,8 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
               _id: item.productId._id,
               name: item.productId.name,
               price: item.productId.price,
+              discountPercentage: item.productId.discountPercentage,
+              discountedPrice: item.productId.discountedPrice,
               imageUrl: item.productId.imageUrl,
               description: item.productId.description,
               stock: item.productId.stock,
@@ -285,10 +287,13 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const newTotal = cart.reduce(
-      (acc, item) => acc + item.price * (item.quantity || 1),
+      (acc, item) => {
+        const finalPrice = item.discountedPrice || item.price;
+        return acc + finalPrice * (item.quantity || 1);
+      },
       0
     );
-    setTotal(newTotal);
+    setTotal(Math.round(newTotal * 100) / 100);
     const newItemsQuantity = cart.reduce(
       (acc, item) => acc + (item.quantity || 1),
       0

@@ -2,7 +2,10 @@ import { useForm } from "react-hook-form";
 import { useProduct } from "../../../context/useProduct";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
-import type { Product, UpdateProductFormProps } from "../../../interfaces/Product";
+import type {
+  Product,
+  UpdateProductFormProps,
+} from "../../../interfaces/Product";
 
 const UpdateProductForm = ({ product }: UpdateProductFormProps) => {
   const { updateProduct } = useProduct();
@@ -31,6 +34,7 @@ const UpdateProductForm = ({ product }: UpdateProductFormProps) => {
       className="mt-8 flex flex-col gap-4 lg:gap-6 max-w-[500px] mx-auto"
     >
       <div>
+        <label>Name</label>
         <input
           {...register("name", {
             required: "El nombre es requerido",
@@ -61,6 +65,7 @@ const UpdateProductForm = ({ product }: UpdateProductFormProps) => {
       </div>
 
       <div>
+        <label>Description</label>
         <input
           {...register("description", {
             required: "La descripción es requerida",
@@ -91,6 +96,7 @@ const UpdateProductForm = ({ product }: UpdateProductFormProps) => {
       </div>
 
       <div>
+        <label>Price</label>
         <input
           {...register("price", {
             required: "El precio es requerido",
@@ -117,6 +123,7 @@ const UpdateProductForm = ({ product }: UpdateProductFormProps) => {
       </div>
 
       <div>
+        <label>Stock</label>
         <input
           {...register("stock", {
             required: "El stock es requerido",
@@ -143,6 +150,7 @@ const UpdateProductForm = ({ product }: UpdateProductFormProps) => {
       </div>
 
       <div>
+        <label>Url image</label>
         <input
           {...register("imageUrl", {
             required: "La url de la imagen es requerida",
@@ -163,13 +171,14 @@ const UpdateProductForm = ({ product }: UpdateProductFormProps) => {
           </p>
         )}
       </div>
-      <button 
-      
-      className="btn bg-blue-600 hover:bg-blue-700 text-white" type="submit">
+      <button
+        className="btn bg-blue-600 hover:bg-blue-700 text-white"
+        type="submit"
+      >
         Actualizar producto
       </button>
     </form>
   );
 };
 
-export default UpdateProductForm
+export default UpdateProductForm;

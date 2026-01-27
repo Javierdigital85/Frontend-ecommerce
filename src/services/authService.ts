@@ -88,9 +88,28 @@ export const logOutService = async () => {
 
     return response.data;
   } catch (error) {
-    const axiosError = error as import("axios").AxiosError<{ message?: string }>;
+    const axiosError = error as import("axios").AxiosError<{
+      message?: string;
+    }>;
     throw new Error(
       axiosError.response?.data?.message || "Error al cerrar la sesión"
+    );
+  }
+};
+
+export const updateUserService = async (userId: string, userData: Partial<UserInfo>) => {
+  try {
+    const res = await axios.put(`${API_URL}/updateUser/${userId}`, userData, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (error) {
+    const axiosError = error as import("axios").AxiosError<{
+      message?: string;
+    }>;
+    throw new Error(
+      axiosError.response?.data?.message || "Error al actualizar el usuario"
     );
   }
 };

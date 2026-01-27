@@ -55,7 +55,15 @@ const ModalCart = () => {
                   <div className="flex-1 flex flex-col md:flex-row md:justify-between md:items-center gap-2">
                     <div>
                       <h4 className="font-semibold">{item.name}</h4>
-                      <p className="text-sm text-gray-600">{item.price}</p>
+                      {item.discountPercentage && item.discountPercentage > 0 ? (
+                        <div className="text-sm">
+                          <span className="line-through text-gray-500">${item.price}</span>
+                          <span className="text-red-600 font-bold ml-2">${item.discountedPrice}</span>
+                          <span className="text-green-600 text-xs ml-1">(-{item.discountPercentage}%)</span>
+                        </div>
+                      ) : (
+                        <p className="text-sm text-gray-600">${item.price}</p>
+                      )}
                     </div>
                     <div className="flex items-center gap-3 mt-2 md:mt-0">
                       <div className="flex items-center rounded-lg">
@@ -87,7 +95,7 @@ const ModalCart = () => {
                       </div>
                       {/*Precio subtotal */}
                       <span className="font-semibold text-lg">
-                        {item.price * item.quantity}
+                        ${(item.discountedPrice || item.price) * item.quantity}
                       </span>
                       {/* Boton de eiliminar */}
                       <button

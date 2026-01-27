@@ -6,10 +6,10 @@ const Home = () => {
 
   console.log("LOS PRODUCTOS", products);
 
+
   return (
     <div>
-      <p className="text-center mb-4">Elegi tu producto ↓</p>
-      <div className="flex flex-wrap gap-5 justify-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center max-w-7xl mx-auto px-4 mt-4">
         {productsLoading ? (
           <div className="loading loading-spinner"></div>
         ) : error ? (

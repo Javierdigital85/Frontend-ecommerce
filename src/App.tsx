@@ -14,7 +14,8 @@ import Checkout from "./pages/Checkout";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFailure from "./pages/PaymentFailure";
 import PaymentPending from "./pages/PaymentPending";
-import UserProfile from "./components/profile/UserProfile";
+import Profile from "./pages/Profile";
+
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
               <Route path="/" element={<Home />}></Route>
               <Route path="/register" element={<Register />}></Route>
               <Route path="/login" element={<Login />}></Route>
-              <Route path="/profile" element={<UserProfile />}></Route>
+              <Route path="/profile" element={<Profile />}></Route>
               <Route path="/detailProduct/:id" element={<DetailProduct />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/payment/success" element={<PaymentSuccess />} />

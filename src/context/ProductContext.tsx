@@ -172,6 +172,7 @@ export const ProductContextProvider = ({ children }: { children: ReactNode }) =>
     productLoading,
     error,
     getProducts,
+    loadProducts: getProducts,
     getProductById,
     updateProduct,
     createProduct,
