@@ -11,7 +11,9 @@ interface TableProductsProps {
 
 const TableProducts = ({ products }: TableProductsProps) => {
   const { deleteProduct, getProducts } = useProduct();
-  const [discountInputs, setDiscountInputs] = useState<{[key: string]: string}>({});
+  const [discountInputs, setDiscountInputs] = useState<{
+    [key: string]: string;
+  }>({});
 
   const handleDelete = async (id: string) => {
     const result = await deleteProduct(id);
@@ -25,7 +27,7 @@ const TableProducts = ({ products }: TableProductsProps) => {
   };
 
   const handleDiscountChange = (productId: string, value: string) => {
-    setDiscountInputs(prev => ({ ...prev, [productId]: value }));
+    setDiscountInputs((prev) => ({ ...prev, [productId]: value }));
   };
 
   const applyDiscount = async (productId: string) => {
@@ -34,14 +36,14 @@ const TableProducts = ({ products }: TableProductsProps) => {
       toast.error("El descuento debe estar entre 0 y 100");
       return;
     }
-    
+
     try {
       await applyDiscountService(productId, discount);
       toast.success("Descuento aplicado exitosamente");
       getProducts();
-      setDiscountInputs(prev => ({ ...prev, [productId]: "" }));
+      setDiscountInputs((prev) => ({ ...prev, [productId]: "" }));
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toast.error("Error al aplicar descuento");
     }
   };
@@ -74,9 +76,13 @@ const TableProducts = ({ products }: TableProductsProps) => {
             <td>
               {(product.discountPercentage ?? 0) > 0 ? (
                 <div>
-                  <span className="line-through text-gray-500">${product.price}</span>
+                  <span className="line-through text-gray-500">
+                    ${product.price}
+                  </span>
                   <br />
-                  <span className="text-red-600 font-bold">${product.discountedPrice}</span>
+                  <span className="text-red-600 font-bold">
+                    ${product.discountedPrice}
+                  </span>
                 </div>
               ) : (
                 `$${product.price}`
@@ -89,12 +95,14 @@ const TableProducts = ({ products }: TableProductsProps) => {
                   min="0"
                   max="100"
                   placeholder="%"
-                  className="input input-sm w-16"
+                  className="input input-sm w-16 border"
                   value={discountInputs[product._id] || ""}
-                  onChange={(e) => handleDiscountChange(product._id, e.target.value)}
+                  onChange={(e) =>
+                    handleDiscountChange(product._id, e.target.value)
+                  }
                 />
                 <button
-                  className="btn btn-sm btn-primary"
+                  className="btn bg-green-600 hover:bg-green-700 text-white px-2"
                   onClick={() => applyDiscount(product._id)}
                 >
                   Apply
@@ -106,7 +114,15 @@ const TableProducts = ({ products }: TableProductsProps) => {
                 </div>
               )}
             </td>
-            <td>{product.stock}</td>
+            <td
+              className={
+                product.stock === 0
+                  ? "text-red-500 font-bold"
+                  : "text-green-600"
+              }
+            >
+              {product.stock === 0 ? "No stock" : `${product.stock}`}
+            </td>
             <td className="max-w-[200px]">
               <div className="truncate" title={product.imageUrl}>
                 {product.imageUrl}

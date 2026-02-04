@@ -112,7 +112,7 @@ const LoginForm = () => {
         )}
       </div>
       <button
-        className="btn bg-purple-600 hover:bg-purple-700 text-white"
+        className="btn bg-blue-600 hover:bg-blue-700 text-white"
         type="submit"
       >
         Iniciar Sesión

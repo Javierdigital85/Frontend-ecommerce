@@ -23,7 +23,7 @@ const Navbar = () => {
         </div>
         <div className="navbar-end gap-3">
           <div className="dropdown">
-            <button className="">Categories</button>
+            {/* <button className="">Categories</button> */}
             <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
               {categories.map((cat) => (
                 <li key={cat}>
