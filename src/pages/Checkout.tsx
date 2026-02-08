@@ -65,16 +65,21 @@ const Checkout = () => {
     setLoading(true);
 
     try {
-      // Prepara los datos para el backend
+      console.log("🔵 [CHECKOUT] Datos del formulario recibidos:", data);
+      console.log("🔵 [CHECKOUT] Carrito actual:", cart);
+
+      // Prepara los datos para el backend en formato MercadoPago
       const orderData = {
-        products: cart.map((item) => ({
-          productId: item._id,
-          name: item.name,
-          price: item.discountedPrice || item.price,
+        items: cart.map((item) => ({
+          id: item._id,
+          title: item.name,
+          unit_price: item.discountedPrice || item.price,
           quantity: item.quantity || 1,
-          imageUrl: item.imageUrl,
+          currency_id: "ARS", // Ajusta según tu moneda
         })),
-        totalAmount: total,
+        payer: {
+          email: data.email,
+        },
         shippingInfo: {
           firstName: data.firstName,
           lastName: data.lastName,
@@ -90,9 +95,14 @@ const Checkout = () => {
         },
       };
 
+      console.log(
+        "🔵 [CHECKOUT] Datos que se enviarán al backend:",
+        JSON.stringify(orderData, null, 2),
+      );
+
       const response = await createOrder(orderData);
 
-      console.log(response);
+      console.log("🔵 [CHECKOUT] Respuesta del backend:", response);
 
       if (response.success && response.paymentUrl) {
         // Mostrar mensage de exito
@@ -273,7 +283,7 @@ const Checkout = () => {
                     },
                   })}
                   className={`p-2 outline-2 border rounded focus:outline-primary w-full ${
-                  errors.address?.street
+                    errors.address?.street
                       ? "border-red-400 outline-red-400 focus:outline-red-400"
                       : ""
                   }`}
@@ -472,7 +482,9 @@ const Checkout = () => {
                         ${item.price * (item.quantity || 1)}
                       </span>
                       <span className="font-semibold text-red-600">
-                        ${(item.discountedPrice || item.price) * (item.quantity || 1)}
+                        $
+                        {(item.discountedPrice || item.price) *
+                          (item.quantity || 1)}
                       </span>
                     </>
                   ) : (

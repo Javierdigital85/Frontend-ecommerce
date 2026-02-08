@@ -12,7 +12,12 @@ export interface MercadoPagoData {
   preferenceId?: string;
   payerEmail?: string;
   paymentId?: string;
-  paymentStatus?: "pending" | "approved" | "rejected" | "cancelled" | "in_process";
+  paymentStatus?:
+    | "pending"
+    | "approved"
+    | "rejected"
+    | "cancelled"
+    | "in_process";
   transactionAmount?: number;
   paymentMethod?: string;
   paidAt?: Date;
@@ -60,7 +65,9 @@ export interface Order {
 
 // Create Order Data (what we send to backend)
 export interface CreateOrderData {
-  products: OrderProduct[];
-  totalAmount: number;
+  items: MercadoPagoItem[];
+  payer: {
+    email: string;
+  };
   shippingInfo: ShippingInfo;
 }

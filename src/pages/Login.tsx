@@ -2,9 +2,11 @@ import LoginForm from "../components/Login/LoginForm";
 
 const Login = () => {
   return (
-    <div className="mt-16">
-      <h1 className="text-3xl font-bold text-center">Iniciar sesión</h1>
-      <LoginForm />
+    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center py-12 px-4">
+      <div className="w-full">
+        <h1 className="text-center font-bold text-2xl">Login</h1>
+        <LoginForm />
+      </div>
     </div>
   );
 };
