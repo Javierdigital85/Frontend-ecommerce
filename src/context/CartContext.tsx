@@ -52,21 +52,23 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
         console.log("response cart", response);
 
         const carItems =
-          response.cart?.products
-            ?.map((item: ICartItem) => ({
-              _id: item.productId._id,
-              name: item.productId.name,
-              price: item.productId.price,
-              discountPercentage: item.productId.discountPercentage,
-              discountedPrice: item.productId.discountedPrice,
-              imageUrl: item.productId.imageUrl,
-              description: item.productId.description,
-              stock: item.productId.stock,
-              quantity: item.quantity,
-            })) || [];
+          response.cart?.products?.map((item: ICartItem) => ({
+            _id: item.productId._id,
+            name: item.productId.name,
+            price: item.productId.price,
+            discountPercentage: item.productId.discountPercentage,
+            discountedPrice: item.productId.discountedPrice,
+            imageUrl: item.productId.imageUrl,
+            description: item.productId.description,
+            stock: item.productId.stock,
+            quantity: item.quantity,
+          })) || [];
         setCart(carItems);
       } catch (error) {
-        console.log("Error al cargar carrito del backend:", (error as Error).message);
+        console.log(
+          "Error al cargar carrito del backend:",
+          (error as Error).message,
+        );
         const localCart = loadLocalCart();
         setCart(localCart);
       } finally {
@@ -134,6 +136,7 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
         await addToCartService(userId, product._id, quantity);
         await loadCart();
         toast.success("producto agregado al carrito");
+        openModal();
       } catch {
         console.error("Erro al agregar producto al carrito");
         toast.error("Error al agregar producto al carrito");
@@ -144,7 +147,7 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
       try {
         const currentCart: CartItem[] = [...cart];
         const existingIndex = currentCart.findIndex(
-          (item: CartItem) => item._id === product._id
+          (item: CartItem) => item._id === product._id,
         );
         if (existingIndex > -1) {
           currentCart[existingIndex].quantity += quantity;
@@ -154,6 +157,7 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
         setCart(currentCart);
         saveLocalCart(currentCart);
         toast.success("Producto agregado al carrito ");
+        openModal();
       } catch (error) {
         console.error("Error al agregar al carrito local", error);
         toast.error("Error al agregar producto al carrito");
@@ -207,7 +211,7 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
     } else {
       try {
         const currentCart = cart.map((item) =>
-          item._id === productId ? { ...item, quantity: newQuantity } : item
+          item._id === productId ? { ...item, quantity: newQuantity } : item,
         );
         setCart(currentCart);
         saveLocalCart(currentCart);
@@ -272,7 +276,7 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
         } catch (error) {
           console.error(
             "Error al sincronizar/cargar carrito tras login",
-            error
+            error,
           );
         }
       })();
@@ -286,17 +290,14 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
   }, [userInfo?.id, userLoading]);
 
   useEffect(() => {
-    const newTotal = cart.reduce(
-      (acc, item) => {
-        const finalPrice = item.discountedPrice || item.price;
-        return acc + finalPrice * (item.quantity || 1);
-      },
-      0
-    );
+    const newTotal = cart.reduce((acc, item) => {
+      const finalPrice = item.discountedPrice || item.price;
+      return acc + finalPrice * (item.quantity || 1);
+    }, 0);
     setTotal(Math.round(newTotal * 100) / 100);
     const newItemsQuantity = cart.reduce(
       (acc, item) => acc + (item.quantity || 1),
-      0
+      0,
     );
 
     setItemsQuantity(newItemsQuantity);
@@ -304,7 +305,7 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  
+
   return (
     <CartContext.Provider
       value={{

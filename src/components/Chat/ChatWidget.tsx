@@ -3,128 +3,167 @@ import { FaRobot, FaPaperPlane, FaTimes, FaCommentDots } from "react-icons/fa";
 import type { Message } from "../../interfaces/Chat";
 import { postMessage, postThreadId } from "../../services/chatService";
 
+const TypingIndicator = () => (
+  <div className="mb-3 flex justify-start">
+    <div className="bg-white text-gray-500 shadow-sm px-4 py-3 rounded-lg flex items-center gap-1">
+      <span
+        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+        style={{ animationDelay: "0ms" }}
+      />
+      <span
+        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+        style={{ animationDelay: "150ms" }}
+      />
+      <span
+        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+        style={{ animationDelay: "300ms" }}
+      />
+    </div>
+  </div>
+);
+
+const formatTime = (date: Date) =>
+  date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
-      text: "Hello! I'm your shopping assistant. How can I help you today?",
+      text: "Hi! I'm your shopping assistant. How can I help you today? 🛍️",
       isAgent: true,
+      timestamp: new Date(),
     },
   ]);
   const [inputValue, setInputValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [threadId, setThreadId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isLoading]);
 
-  const toggleChat = () => {
-    setIsOpen(!isOpen);
-  };
+  // Auto-focus input when chat opens
+  useEffect(() => {
+    if (isOpen) inputRef.current?.focus();
+  }, [isOpen]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
+  const toggleChat = () => setIsOpen(!isOpen);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim() || isLoading) return;
 
-    const userMessage = inputValue;
-    const message = {
-      text: userMessage,
-      isAgent: false,
-    };
-
-    setMessages((prevMessages) => [...prevMessages, message]);
+    const userMessage = inputValue.trim();
+    setMessages((prev) => [
+      ...prev,
+      { text: userMessage, isAgent: false, timestamp: new Date() },
+    ]);
     setInputValue("");
+    setIsLoading(true);
 
     try {
       let data;
-
       if (threadId) {
-        // Conversación existente
         data = await postThreadId(threadId, userMessage);
       } else {
-        // Nueva conversación
         data = await postMessage(userMessage);
         setThreadId(data.threadId);
       }
 
-      const agentResponse = {
-        text: data.response,
-        isAgent: true,
-      };
-
-      setMessages((prevMessages) => [...prevMessages, agentResponse]);
-    } catch (error) {
-      console.error("Error:", error);
-      const errorMessage = {
-        text: "Sorry, I'm having trouble connecting. Please try again.",
-        isAgent: true,
-      };
-      setMessages((prevMessages) => [...prevMessages, errorMessage]);
+      setMessages((prev) => [
+        ...prev,
+        { text: data.response, isAgent: true, timestamp: new Date() },
+      ]);
+    } catch (error: any) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: error.message || "Something went wrong. Please try again.",
+          isAgent: true,
+          timestamp: new Date(),
+        },
+      ]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="relative">
       {isOpen && (
-        <div className="absolute bottom-16 right-0 w-80 h-96 bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col overflow-hidden">
+        <div className="absolute bottom-16 right-0 w-96 h-[500px] bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden animate-in">
           {/* Header */}
-          <div className="bg-blue-600 text-white p-4 flex items-center justify-between">
+          <div className="bg-blue-600 text-white px-4 py-3 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
               <FaRobot className="text-lg" />
-              <h3 className="font-semibold">Shop Assistant</h3>
+              <div>
+                <h3 className="font-semibold text-sm">Shop Assistant</h3>
+                <span className="text-xs text-blue-200">Online</span>
+              </div>
             </div>
             <button
               onClick={toggleChat}
-              className="text-white hover:text-gray-200 transition-colors"
+              className="text-white hover:text-gray-200 transition-colors p-1"
             >
               <FaTimes />
             </button>
           </div>
 
           {/* Messages */}
-          <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
+          <div className="flex-1 px-4 py-3 overflow-y-auto bg-gray-50 space-y-1">
             {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`mb-3 flex ${
-                  message.isAgent ? "justify-start" : "justify-end"
-                }`}
-              >
+              <div key={index}>
                 <div
-                  className={`max-w-xs px-3 py-2 rounded-lg ${
-                    message.isAgent
-                      ? "bg-white text-gray-800 shadow-sm"
-                      : "bg-blue-600 text-white"
-                  }`}
+                  className={`flex ${message.isAgent ? "justify-start" : "justify-end"}`}
                 >
-                  {message.text}
+                  <div
+                    className={`max-w-[80%] px-3 py-2 rounded-lg text-sm whitespace-pre-wrap break-words ${
+                      message.isAgent
+                        ? "bg-white text-gray-800 shadow-sm border border-gray-100"
+                        : "bg-blue-600 text-white"
+                    }`}
+                  >
+                    {message.text}
+                  </div>
+                </div>
+                <div
+                  className={`flex ${message.isAgent ? "justify-start" : "justify-end"} mt-0.5 mb-2`}
+                >
+                  <span className="text-[10px] text-gray-400 px-1">
+                    {formatTime(message.timestamp)}
+                  </span>
                 </div>
               </div>
             ))}
+            {isLoading && <TypingIndicator />}
             <div ref={messagesEndRef} />
           </div>
 
           {/* Input */}
-          <form onSubmit={handleSendMessage} className="p-4 bg-white border-t">
+          <form
+            onSubmit={handleSendMessage}
+            className="px-4 py-3 bg-white border-t shrink-0"
+          >
             <div className="flex gap-2">
               <input
+                ref={inputRef}
                 type="text"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Type your message..."
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                placeholder={
+                  isLoading ? "Waiting for response..." : "Type your message..."
+                }
                 value={inputValue}
-                onChange={handleInputChange}
+                onChange={(e) => setInputValue(e.target.value)}
+                disabled={isLoading}
               />
               <button
                 type="submit"
-                disabled={!inputValue.trim()}
+                disabled={!inputValue.trim() || isLoading}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                <FaPaperPlane />
+                <FaPaperPlane className="text-sm" />
               </button>
             </div>
           </form>
@@ -136,7 +175,11 @@ const ChatWidget = () => {
         onClick={toggleChat}
         className="w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all duration-200 flex items-center justify-center hover:scale-105"
       >
-        <FaCommentDots className="text-xl" />
+        {isOpen ? (
+          <FaTimes className="text-xl" />
+        ) : (
+          <FaCommentDots className="text-xl" />
+        )}
       </button>
     </div>
   );

@@ -126,18 +126,66 @@ const Checkout = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center mb-8">Checkout</h1>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-base-100 p-6 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-semibold mb-6">Información de Envío</h2>
+    <div className="container mx-auto px-4 py-8 max-w-7xl">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+          Checkout
+        </h1>
+        <p className="text-gray-600">Complete your purchase securely</p>
+      </div>
+
+      {/* Progress Indicator */}
+      <div className="mb-8">
+        <div className="flex items-center justify-center gap-2 md:gap-4">
+          <div className="flex items-center">
+            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+              1
+            </div>
+            <span className="ml-2 text-sm md:text-base font-medium text-blue-600">
+              Shipping
+            </span>
+          </div>
+          <div className="w-12 md:w-20 h-1 bg-gray-300"></div>
+          <div className="flex items-center">
+            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold">
+              2
+            </div>
+            <span className="ml-2 text-sm md:text-base font-medium text-gray-600">
+              Payment
+            </span>
+          </div>
+          <div className="w-12 md:w-20 h-1 bg-gray-300"></div>
+          <div className="flex items-center">
+            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold">
+              3
+            </div>
+            <span className="ml-2 text-sm md:text-base font-medium text-gray-600">
+              Confirm
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Shipping Form */}
+        <div className="lg:col-span-2 bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+          <h2 className="text-2xl font-bold mb-6 text-gray-900 flex items-center gap-2">
+            <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-bold">
+              1
+            </span>
+            Shipping Information
+          </h2>
 
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-4 lg:gap-6"
+            className="flex flex-col gap-5"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  First Name <span className="text-red-500">*</span>
+                </label>
                 <input
                   {...register("firstName", {
                     required: "El nombre es requerido",
@@ -154,23 +202,26 @@ const Checkout = () => {
                       message: "Solo letras y espacios",
                     },
                   })}
-                  className={`p-2 outline-2 border rounded focus:outline-primary w-full ${
+                  className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition-colors ${
                     errors.firstName
-                      ? "border-red-400 outline-red-400 focus:outline-red-400"
-                      : ""
+                      ? "border-red-400 focus:border-red-500 bg-red-50"
+                      : "border-gray-300 focus:border-blue-500"
                   }`}
                   type="text"
-                  placeholder="Nombre"
+                  placeholder="Enter your first name"
                   autoComplete="given-name"
                 />
                 {errors.firstName && (
-                  <p className="text-red-500 text-sm mt-2 ml-1">
-                    {errors.firstName.message}
+                  <p className="text-red-600 text-sm mt-1.5 flex items-center gap-1">
+                    <span>⚠️</span> {errors.firstName.message}
                   </p>
                 )}
               </div>
 
               <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Last Name <span className="text-red-500">*</span>
+                </label>
                 <input
                   {...register("lastName", {
                     required: "El apellido es requerido",
@@ -187,22 +238,27 @@ const Checkout = () => {
                       message: "Solo letras y espacios",
                     },
                   })}
-                  className={`p-2 outline-2 border rounded focus:outline-primary w-full ${
-                    errors.lastName ? "border-red-400 outline-red-400" : ""
+                  className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition-colors ${
+                    errors.lastName
+                      ? "border-red-400 focus:border-red-500 bg-red-50"
+                      : "border-gray-300 focus:border-blue-500"
                   }`}
                   type="text"
-                  placeholder="Apellido"
+                  placeholder="Enter your last name"
                   autoComplete="family-name"
                 />
                 {errors.lastName && (
-                  <p className="text-red-500 text-sm my-2 ml-1">
-                    {errors.lastName.message}
+                  <p className="text-red-600 text-sm mt-1.5 flex items-center gap-1">
+                    <span>⚠️</span> {errors.lastName.message}
                   </p>
                 )}
               </div>
             </div>
 
             <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Email Address <span className="text-red-500">*</span>
+              </label>
               <input
                 {...register("email", {
                   required: "El email es requerido",
@@ -219,23 +275,26 @@ const Checkout = () => {
                     message: "Maximo 254 caracteres",
                   },
                 })}
-                className={`p-2 outline-2 border rounded focus:outline-primary w-full ${
+                className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition-colors ${
                   errors.email
-                    ? "border-red-400 outline-red-400 focus:outline-red-400"
-                    : ""
+                    ? "border-red-400 focus:border-red-500 bg-red-50"
+                    : "border-gray-300 focus:border-blue-500"
                 }`}
                 type="email"
-                placeholder="Email"
+                placeholder="your.email@example.com"
                 autoComplete="email"
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-2 ml-1">
-                  {errors.email.message}
+                <p className="text-red-600 text-sm mt-1.5 flex items-center gap-1">
+                  <span>⚠️</span> {errors.email.message}
                 </p>
               )}
             </div>
 
             <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Phone Number <span className="text-red-500">*</span>
+              </label>
               <input
                 {...register("phone", {
                   required: "El telefono es requerido",
@@ -252,24 +311,27 @@ const Checkout = () => {
                     message: "Máximo 20 caracteres",
                   },
                 })}
-                className={`p-2 outline-2 border rounded focus:outline-primary w-full ${
+                className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition-colors ${
                   errors.phone
-                    ? "border-red-400 outline-red-400 focus:outline-red-400"
-                    : ""
+                    ? "border-red-400 focus:border-red-500 bg-red-50"
+                    : "border-gray-300 focus:border-blue-500"
                 }`}
                 type="tel"
-                placeholder="Teléfono"
+                placeholder="+1 (555) 000-0000"
                 autoComplete="tel"
               />
               {errors.phone && (
-                <p className="text-red-500 text-sm mt-2 ml-1">
-                  {errors.phone.message}
+                <p className="text-red-600 text-sm mt-1.5 flex items-center gap-1">
+                  <span>⚠️</span> {errors.phone.message}
                 </p>
               )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               <div className="md:col-span-2">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Street Address <span className="text-red-500">*</span>
+                </label>
                 <input
                   {...register("address.street", {
                     required: "La calle es requerida",
@@ -282,22 +344,25 @@ const Checkout = () => {
                       message: "Máximo 100 caracteres",
                     },
                   })}
-                  className={`p-2 outline-2 border rounded focus:outline-primary w-full ${
+                  className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition-colors ${
                     errors.address?.street
-                      ? "border-red-400 outline-red-400 focus:outline-red-400"
-                      : ""
+                      ? "border-red-400 focus:border-red-500 bg-red-50"
+                      : "border-gray-300 focus:border-blue-500"
                   }`}
                   type="text"
-                  placeholder="Calle"
+                  placeholder="123 Main Street"
                   autoComplete="address"
                 />
                 {errors.address?.street && (
-                  <p className="text-red-500 text-sm mt-2 ml-1">
-                    {errors.address.street.message}
+                  <p className="text-red-600 text-sm mt-1.5 flex items-center gap-1">
+                    <span>⚠️</span> {errors.address.street.message}
                   </p>
                 )}
               </div>
               <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Number <span className="text-red-500">*</span>
+                </label>
                 <input
                   {...register("address.number", {
                     required: "El número es requerido",
@@ -314,25 +379,28 @@ const Checkout = () => {
                       message: "Máximo 10 números",
                     },
                   })}
-                  className={`p-2 outline-2 border rounded focus:outline-primary w-full ${
+                  className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition-colors ${
                     errors.address?.number
-                      ? "border-red-400 outline-red-400 focus:outline-red-400"
-                      : ""
+                      ? "border-red-400 focus:border-red-500 bg-red-50"
+                      : "border-gray-300 focus:border-blue-500"
                   }`}
                   type="text"
-                  placeholder="Número"
+                  placeholder="456"
                   autoComplete="address"
                 />
                 {errors.address?.number && (
-                  <p className="text-red-500 text-sm mt-2 ml-1">
-                    {errors.address.number.message}
+                  <p className="text-red-600 text-sm mt-1.5 flex items-center gap-1">
+                    <span>⚠️</span> {errors.address.number.message}
                   </p>
                 )}
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  City <span className="text-red-500">*</span>
+                </label>
                 <input
                   {...register("address.city", {
                     required: "La ciudad es requerida",
@@ -349,23 +417,26 @@ const Checkout = () => {
                       message: "Solo letras y espacios",
                     },
                   })}
-                  className={`p-2 outline-2 border rounded focus:outline-primary w-full ${
+                  className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition-colors ${
                     errors.address?.city
-                      ? "border-red-400 outline-red-400 focus:outline-red-400"
-                      : ""
+                      ? "border-red-400 focus:border-red-500 bg-red-50"
+                      : "border-gray-300 focus:border-blue-500"
                   }`}
                   type="text"
-                  placeholder="Ciudad"
+                  placeholder="New York"
                   autoComplete="address"
                 />
                 {errors.address?.city && (
-                  <p className="text-red-500 text-sm mt-2 ml-1">
-                    {errors.address.city.message}
+                  <p className="text-red-600 text-sm mt-1.5 flex items-center gap-1">
+                    <span>⚠️</span> {errors.address.city.message}
                   </p>
                 )}
               </div>
 
               <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  State/Province <span className="text-red-500">*</span>
+                </label>
                 <input
                   {...register("address.state", {
                     required: "La provincia es requerida",
@@ -382,24 +453,27 @@ const Checkout = () => {
                       message: "Solo letras y espacios",
                     },
                   })}
-                  className={`p-2 outline-2 border rounded focus:outline-primary w-full ${
+                  className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition-colors ${
                     errors.address?.state
-                      ? "border-red-400 outline-red-400 focus:outline-red-400"
-                      : ""
+                      ? "border-red-400 focus:border-red-500 bg-red-50"
+                      : "border-gray-300 focus:border-blue-500"
                   }`}
                   type="text"
-                  placeholder="Provincia"
+                  placeholder="California"
                   autoComplete="address"
                 />
                 {errors.address?.state && (
-                  <p className="text-red-500 text-sm mt-2 ml-1">
-                    {errors.address.state.message}
+                  <p className="text-red-600 text-sm mt-1.5 flex items-center gap-1">
+                    <span>⚠️</span> {errors.address.state.message}
                   </p>
                 )}
               </div>
             </div>
 
             <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Zip/Postal Code <span className="text-red-500">*</span>
+              </label>
               <input
                 {...register("address.zipCode", {
                   required: "El código postal es requerido",
@@ -416,18 +490,18 @@ const Checkout = () => {
                     message: "Máximo 10 caracteres",
                   },
                 })}
-                className={`p-2 outline-2 border rounded focus:outline-primary w-full ${
+                className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition-colors ${
                   errors.address?.zipCode
-                    ? "border-red-400 outline-red-400 focus:outline-red-400"
-                    : ""
+                    ? "border-red-400 focus:border-red-500 bg-red-50"
+                    : "border-gray-300 focus:border-blue-500"
                 }`}
                 type="text"
-                placeholder="Código Postal"
+                placeholder="10001"
                 autoComplete="postal-code"
               />
               {errors.address?.zipCode && (
-                <p className="text-red-500 text-sm mt-2 ml-1">
-                  {errors.address.zipCode.message}
+                <p className="text-red-600 text-sm mt-1.5 flex items-center gap-1">
+                  <span>⚠️</span> {errors.address.zipCode.message}
                 </p>
               )}
             </div>
@@ -435,70 +509,111 @@ const Checkout = () => {
             <button
               type="submit"
               disabled={loading}
-              className="btn bg-blue-600 hover:bg-blue-700 text-white mt-6"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed mt-6"
             >
               {loading ? (
-                <>
-                  <span className="loading loading-spinner">Procesando...</span>
-                </>
+                <span className="flex items-center justify-center gap-2">
+                  <span className="loading loading-spinner loading-sm"></span>
+                  Processing...
+                </span>
               ) : (
-                "Proceder al Pago"
+                "Proceed to Payment"
               )}
             </button>
           </form>
         </div>
 
-        {/* Resumen de la orden */}
-        <div className="bg-base-100 p-6 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-semibold mb-6">Resumen de la Orden</h2>
-          <div className="space-y-4">
-            {cart.map((item) => (
-              <div
-                key={item._id}
-                className="flex justify-between items-center border-b pb-2"
-              >
-                <div className="flex items-center space-x-3">
-                  <img
-                    src={item.imageUrl}
-                    alt={item.name}
-                    className="w-12 h-12 object-cover rounded"
-                  />
-                  <div>
-                    <h3 className="font-medium">{item.name}</h3>
-                    <p className="text-sm text-gray-500">
-                      Cantidad: {item.quantity || 1}
-                    </p>
-                    {item.discountPercentage && item.discountPercentage > 0 && (
-                      <p className="text-xs text-green-600">
-                        Descuento: -{item.discountPercentage}%
+        {/* Order Summary */}
+        <div className="lg:col-span-1">
+          <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 sticky top-24">
+            <h2 className="text-2xl font-bold mb-6 text-gray-900 flex items-center gap-2">
+              <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-bold">
+                2
+              </span>
+              Order Summary
+            </h2>
+            <div className="space-y-4 mb-6">
+              {cart.map((item) => (
+                <div
+                  key={item._id}
+                  className="flex justify-between items-start gap-3 pb-4 border-b border-gray-200 last:border-0"
+                >
+                  <div className="flex items-start gap-3 flex-1">
+                    <img
+                      src={item.imageUrl}
+                      alt={item.name}
+                      className="w-16 h-16 object-cover rounded-lg border border-gray-200"
+                    />
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-900 text-sm mb-1 line-clamp-2">
+                        {item.name}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        Qty: {item.quantity || 1}
                       </p>
+                      {item.discountPercentage &&
+                        item.discountPercentage > 0 && (
+                          <span className="inline-block mt-1 text-xs font-semibold text-green-700 bg-green-100 px-2 py-0.5 rounded-full">
+                            -{item.discountPercentage}% OFF
+                          </span>
+                        )}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    {item.discountPercentage && item.discountPercentage > 0 ? (
+                      <>
+                        <span className="text-sm line-through text-gray-500 block">
+                          ${(item.price * (item.quantity || 1)).toFixed(2)}
+                        </span>
+                        <span className="font-bold text-blue-600">
+                          $
+                          {(
+                            (item.discountedPrice || item.price) *
+                            (item.quantity || 1)
+                          ).toFixed(2)}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="font-bold text-gray-900">
+                        ${(item.price * (item.quantity || 1)).toFixed(2)}
+                      </span>
                     )}
                   </div>
                 </div>
-                <div className="text-right">
-                  {item.discountPercentage && item.discountPercentage > 0 ? (
-                    <>
-                      <span className="text-sm line-through text-gray-500 block">
-                        ${item.price * (item.quantity || 1)}
-                      </span>
-                      <span className="font-semibold text-red-600">
-                        $
-                        {(item.discountedPrice || item.price) *
-                          (item.quantity || 1)}
-                      </span>
-                    </>
-                  ) : (
-                    <span className="font-semibold">
-                      ${item.price * (item.quantity || 1)}
-                    </span>
-                  )}
+              ))}
+            </div>
+
+            {/* Total Section */}
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-5 rounded-xl border border-blue-100">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-gray-700 font-medium">Subtotal:</span>
+                <span className="font-semibold text-gray-900">
+                  ${total.toFixed(2)}
+                </span>
+              </div>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-gray-700 font-medium">Shipping:</span>
+                <span className="font-semibold text-green-600">FREE</span>
+              </div>
+              <div className="border-t border-blue-200 pt-3 mt-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-bold text-gray-900">
+                    Total:
+                  </span>
+                  <span className="text-2xl font-bold text-blue-600">
+                    ${total.toFixed(2)}
+                  </span>
                 </div>
               </div>
-            ))}
-            <div className="border-t pt-4">
-              <div className="flex justify-between items-center text-xl font-bold">
-                <span>Total:</span>
-                <span>${total}</span>
+            </div>
+
+            {/* Security Badge */}
+            <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <span className="text-lg">🔒</span>
+                <span className="font-medium">
+                  Secure checkout powered by Stripe
+                </span>
               </div>
             </div>
           </div>

@@ -1,4 +1,5 @@
 export interface Message {
   text: string;
-  isAgent: boolean
+  isAgent: boolean;
+  timestamp: Date;
 }

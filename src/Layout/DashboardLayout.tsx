@@ -1,45 +1,88 @@
-import { Outlet, Link } from "react-router";
+import { Outlet, Link, useLocation } from "react-router";
+import { FiPackage, FiGrid, FiMenu } from "react-icons/fi";
+import { useState } from "react";
 
 const DashboardLayout = () => {
+  const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const isActive = (path: string) => location.pathname.includes(path);
+
   return (
-    <>
-      <div className="navbar bg-base-100 shadow-lg mt-8">
-        <div className="dropdown md:hidden">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+      {/* Top Navigation Bar */}
+      <nav className="bg-white shadow-lg sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo/Brand */}
+            <div className="flex items-center gap-3">
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-2 rounded-lg">
+                <FiGrid className="text-white text-2xl" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-gray-900">
+                  Admin Dashboard
+                </h1>
+                <p className="text-xs text-gray-500">Product Management</p>
+              </div>
+            </div>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-4">
+              <Link
+                to="/admin/dashboard/products"
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all ${isActive("/products") ? "bg-blue-600 text-white shadow-lg" : "text-gray-700 hover:bg-blue-50"}`}
+              >
+                <FiPackage className="text-lg" />
+                Products
+              </Link>
+              <Link
+                to="/"
+                className="px-4 py-2 rounded-lg font-semibold text-gray-700 hover:bg-gray-100 transition-all"
+              >
+                Back to Store
+              </Link>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
             >
-              {" "}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />{" "}
-            </svg>
+              <FiMenu className="text-2xl text-gray-700" />
+            </button>
           </div>
 
-          {/* <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 p-2 shadow"
-          >
-            <li>
-              <Link to="/admin/dashboard/products">Productos</Link>
-            </li>
-          </ul> */}
+          {/* Mobile Navigation */}
+          {mobileMenuOpen && (
+            <div className="md:hidden py-4 border-t border-gray-200">
+              <div className="flex flex-col gap-2">
+                <Link
+                  to="/admin/dashboard/products"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center gap-2 px-4 py-3 rounded-lg font-semibold transition-all ${isActive("/products") ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-blue-50"}`}
+                >
+                  <FiPackage className="text-lg" />
+                  Products
+                </Link>
+                <Link
+                  to="/"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-4 py-3 rounded-lg font-semibold text-gray-700 hover:bg-gray-100 transition-all"
+                >
+                  Back to Store
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
-        <div className="md:mx-auto hidden md:inline-flex md:gap-4">
-          <Link className="btn bg-blue-600 hover:bg-blue-700 text-white" to="/admin/dashboard/products">
-            Productos
-          </Link>
-        </div>
-      </div>
-      <Outlet />
-    </>
+      </nav>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Outlet />
+      </main>
+    </div>
   );
 };
 
