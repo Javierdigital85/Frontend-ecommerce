@@ -34,15 +34,15 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white rounded-2xl overflow-hidden mb-8 mt-6">
+      <section className="relative bg-gradient-to-br from-blue-600 via-blue-800 to-indigo-800 text-white rounded-2xl overflow-hidden mb-8 mt-6">
         <div className="absolute inset-0 bg-black/10"></div>
-        <div className="relative px-6 py-16 md:py-24 lg:py-32">
-          <div className="max-w-4xl mx-auto text-center">
+        <div className="relative px-6 py-16 md:py-24 lg:py-10">
+          <div className="max-w-5xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight">
-              Discover Amazing Products
+              Discover Amazing Musical Products
             </h1>
             <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Shop the latest trends with exclusive deals and fast shipping
+              Shop the latest guitars with exclusive deals and fast shipping
             </p>
 
             {/* Search Bar in Hero */}
