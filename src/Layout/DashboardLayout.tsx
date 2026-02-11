@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from "react-router";
-import { FiPackage, FiGrid, FiMenu } from "react-icons/fi";
+import { FiPackage } from "react-icons/fi";
 import { useState } from "react";
 
 const DashboardLayout = () => {
