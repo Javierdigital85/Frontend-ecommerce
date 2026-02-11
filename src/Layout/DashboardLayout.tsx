@@ -13,46 +13,6 @@ const DashboardLayout = () => {
       {/* Top Navigation Bar */}
       <nav className="bg-white shadow-lg sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo/Brand */}
-            <div className="flex items-center gap-3">
-              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-2 rounded-lg">
-                <FiGrid className="text-white text-2xl" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">
-                  Admin Dashboard
-                </h1>
-                <p className="text-xs text-gray-500">Product Management</p>
-              </div>
-            </div>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-4">
-              <Link
-                to="/admin/dashboard/products"
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all ${isActive("/products") ? "bg-blue-600 text-white shadow-lg" : "text-gray-700 hover:bg-blue-50"}`}
-              >
-                <FiPackage className="text-lg" />
-                Products
-              </Link>
-              <Link
-                to="/"
-                className="px-4 py-2 rounded-lg font-semibold text-gray-700 hover:bg-gray-100 transition-all"
-              >
-                Back to Store
-              </Link>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <FiMenu className="text-2xl text-gray-700" />
-            </button>
-          </div>
-
           {/* Mobile Navigation */}
           {mobileMenuOpen && (
             <div className="md:hidden py-4 border-t border-gray-200">
