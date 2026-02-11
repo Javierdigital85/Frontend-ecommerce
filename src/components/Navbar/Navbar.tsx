@@ -18,7 +18,7 @@ const Navbar = () => {
       <nav className="navbar bg-base-100 shadow-sm lg:rounded-box w-full">
         <div className="navbar-start">
           <Link className="btn btn-ghost text-xl" to="/">
-            E-Commerce
+            Musical Store
           </Link>
         </div>
         <div className="navbar-end gap-3">

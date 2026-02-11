@@ -3,6 +3,7 @@ import { FaPlus, FaMinus, FaShoppingCart } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
 import { useCart } from "../../context/useCart";
 import { Link } from "react-router";
+import { useState } from "react";
 
 const ModalCart = () => {
   const {
@@ -16,6 +17,8 @@ const ModalCart = () => {
     clearCart,
     loading,
   } = useCart();
+
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   if (!isModalOpen) return null;
 
@@ -184,13 +187,7 @@ const ModalCart = () => {
                   Continue Shopping
                 </Link>
                 <button
-                  onClick={async () => {
-                    if (
-                      window.confirm("Are you sure you want to clear the cart?")
-                    ) {
-                      await clearCart();
-                    }
-                  }}
+                  onClick={() => setShowClearConfirm(true)}
                   disabled={loading}
                   className="btn btn-outline border-2 border-red-300 hover:bg-red-50 text-red-600 font-semibold disabled:opacity-50"
                 >
@@ -201,6 +198,35 @@ const ModalCart = () => {
           </>
         )}
       </section>
+      {showClearConfirm && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg mb-4">Clear cart?</h3>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to remove all items from your cart?
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                className="btn btn-outline"
+                onClick={() => {
+                  setShowClearConfirm(false);
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn bg-red-500 hover:bg-red-600 text-white p-2"
+                onClick={async () => {
+                  await clearCart();
+                  setShowClearConfirm(false);
+                }}
+              >
+                Yes, Clear Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Click fuera para cerrar el modal */}
       <div className="modal-backdrop" onClick={closeModal}></div>

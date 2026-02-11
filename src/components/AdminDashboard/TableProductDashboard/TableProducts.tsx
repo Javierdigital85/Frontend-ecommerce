@@ -16,9 +16,10 @@ const TableProducts = ({ products }: TableProductsProps) => {
     [key: string]: string;
   }>({});
 
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [productToDelete, setProductToDelete] = useState<string | null>(null);
+
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Are you sure you want to delete this product?")) return;
-    
     const result = await deleteProduct(id);
     if (result.success) {
       toast.success(result.message);
@@ -49,6 +50,17 @@ const TableProducts = ({ products }: TableProductsProps) => {
     }
   };
 
+  const removeDiscount = async (productId: string) => {
+    try {
+      await applyDiscountService(productId, 0);
+      toast.success("Discount removed successfully");
+      getProducts();
+    } catch (error) {
+      console.error(error);
+      toast.error("Error canceling discount");
+    }
+  };
+
   return (
     <div className="overflow-x-auto">
       <table className="table w-full">
@@ -61,18 +73,30 @@ const TableProducts = ({ products }: TableProductsProps) => {
             <th>Discount</th>
             <th className="text-center">Stock</th>
             <th className="hidden xl:table-cell">Image URL</th>
-            <th className="text-center" colSpan={2}>Actions</th>
+            <th className="text-center" colSpan={2}>
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody>
           {products.map((product: Product, index: number) => (
-            <tr key={`${product._id}-${index}`} className="hover:bg-blue-50 transition-colors">
-              <td className="text-center font-semibold text-gray-700">{index + 1}</td>
+            <tr
+              key={`${product._id}-${index}`}
+              className="hover:bg-blue-50 transition-colors"
+            >
+              <td className="text-center font-semibold text-gray-700">
+                {index + 1}
+              </td>
               <td>
-                <div className="font-bold text-gray-900 line-clamp-2">{product.name}</div>
+                <div className="font-bold text-gray-900 line-clamp-2">
+                  {product.name}
+                </div>
               </td>
               <td className="hidden lg:table-cell max-w-xs">
-                <div className="truncate text-gray-600" title={product.description}>
+                <div
+                  className="truncate text-gray-600"
+                  title={product.description}
+                >
                   {product.description}
                 </div>
               </td>
@@ -87,7 +111,9 @@ const TableProducts = ({ products }: TableProductsProps) => {
                     </span>
                   </div>
                 ) : (
-                  <span className="font-semibold text-gray-900">${product.price.toFixed(2)}</span>
+                  <span className="font-semibold text-gray-900">
+                    ${product.price.toFixed(2)}
+                  </span>
                 )}
               </td>
               <td>
@@ -97,39 +123,55 @@ const TableProducts = ({ products }: TableProductsProps) => {
                       type="number"
                       min="0"
                       max="100"
-                      placeholder="%"
+                      placeholder=""
                       className="input input-sm w-16 border-2 border-gray-300 focus:border-blue-600 focus:outline-none"
                       value={discountInputs[product._id] || ""}
-                      onChange={(e) => handleDiscountChange(product._id, e.target.value)}
+                      onChange={(e) =>
+                        handleDiscountChange(product._id, e.target.value)
+                      }
                     />
                     <button
-                      className="btn btn-sm bg-green-600 hover:bg-green-700 text-white border-none"
+                      className="btn btn-sm bg-green-600 hover:bg-green-700 text-white border-none p-2"
                       onClick={() => applyDiscount(product._id)}
                       title="Apply discount"
                     >
+                      Apply
                       <FiPercent />
                     </button>
                   </div>
                   {(product.discountPercentage ?? 0) > 0 && (
-                    <span className="text-xs font-semibold text-green-700 bg-green-100 px-2 py-0.5 rounded-full text-center">
-                      {product.discountPercentage}% OFF
-                    </span>
+                    <div>
+                      <span className="text-xs font-semibold text-green-700 bg-green-100 px-2 py-0.5 rounded-full text-center">
+                        {product.discountPercentage}% OFF
+                      </span>
+                      <button
+                        className="btn btn-xs bg-red-500 hover:bg-red-700 text-white border-none p-2"
+                        onClick={() => removeDiscount(product._id)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
                   )}
                 </div>
               </td>
               <td className="text-center">
-                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                  product.stock === 0
-                    ? "bg-red-100 text-red-700"
-                    : product.stock < 10
-                    ? "bg-orange-100 text-orange-700"
-                    : "bg-green-100 text-green-700"
-                }`}>
+                <span
+                  className={`p-2 rounded-full text-sm font-semibold whitespace-nowrap  ${
+                    product.stock === 0
+                      ? "bg-red-100 text-red-700"
+                      : product.stock < 10
+                        ? "bg-orange-100 text-orange-700"
+                        : "bg-green-100 text-green-700"
+                  }`}
+                >
                   {product.stock === 0 ? "Out of Stock" : product.stock}
                 </span>
               </td>
               <td className="hidden xl:table-cell max-w-[200px]">
-                <div className="truncate text-gray-600 text-sm" title={product.imageUrl}>
+                <div
+                  className="truncate text-gray-600 text-sm"
+                  title={product.imageUrl}
+                >
                   {product.imageUrl}
                 </div>
               </td>
@@ -142,10 +184,15 @@ const TableProducts = ({ products }: TableProductsProps) => {
                   <FiEdit2 />
                 </Link>
               </td>
+
               <td className="text-center">
                 <button
-                  className="btn btn-sm bg-red-600 hover:bg-red-700 text-white border-none"
-                  onClick={() => handleDelete(product._id)}
+                  className="btn btn-sm bg-red-600 hover:bg-red-700 text-white border-none w-8"
+                  // onClick={() => handleDelete(product._id)}
+                  onClick={() => {
+                    setProductToDelete(product._id);
+                    setShowClearConfirm(true);
+                  }}
                   title="Delete product"
                 >
                   <FiTrash2 />
@@ -155,9 +202,38 @@ const TableProducts = ({ products }: TableProductsProps) => {
           ))}
         </tbody>
       </table>
+      {showClearConfirm && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3>Do you want to delete this product?</h3>
+            <div className="flex gap-3 justify-end">
+              <button
+                className="btn btn-outline"
+                onClick={() => {
+                  setShowClearConfirm(false);
+                  setProductToDelete(null);
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn bg-red-500 hover:bg-red-600 text-white p-2"
+                onClick={async () => {
+                  if (productToDelete) {
+                    await handleDelete(productToDelete);
+                  }
+                  setShowClearConfirm(false);
+                  setProductToDelete(null);
+                }}
+              >
+                Yes, delete product
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default TableProducts;
-

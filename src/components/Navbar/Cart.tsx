@@ -1,4 +1,4 @@
-import { FaShoppingCart } from "react-icons/fa";
+import { FiShoppingCart } from "react-icons/fi";
 import ModalCart from "./ModalCart";
 import { useCart } from "../../context/useCart";
 
@@ -27,7 +27,7 @@ const Cart = () => {
             className="btn btn-success btn-circle"
           >
             <div className="indicator">
-              <FaShoppingCart className="h-5 w-5" />
+              <FiShoppingCart className="h-5 w-5" />
               <span className="badge badge-sm indicator-item">
                 {itemsQuantity}
               </span>
