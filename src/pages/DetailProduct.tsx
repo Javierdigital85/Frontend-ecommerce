@@ -12,6 +12,8 @@ import {
   FiShield,
 } from "react-icons/fi";
 import { FaStar } from "react-icons/fa";
+import { useLanguage } from "../context/useLanguage";
+import { useTranslation } from "../hook/useTranslation";
 
 const DetailProduct = () => {
   const { id } = useParams();
@@ -20,6 +22,8 @@ const DetailProduct = () => {
   const [quantity, setQuantity] = useState(1);
   const [addedSuccess, setAddedSuccess] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
+  const { language } = useLanguage();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (id) {
@@ -89,13 +93,15 @@ const DetailProduct = () => {
           to="/"
           className="hover:text-blue-600 transition-colors flex items-center gap-1"
         >
-          <FiHome /> Home
+          <FiHome /> {t.home}
         </Link>
         <FiChevronRight className="text-gray-400" />
-        <span className="text-gray-900 font-medium">Products</span>
+        <span className="text-gray-900 font-medium">{t.products}</span>
         <FiChevronRight className="text-gray-400" />
         <span className="text-gray-900 font-medium truncate max-w-xs">
-          {product.name}
+          {language === "es" && product.name_es
+            ? product.name_es
+            : product.name}
         </span>
       </nav>
 
@@ -145,7 +151,9 @@ const DetailProduct = () => {
           {/* Title and Rating */}
           <div>
             <h1 className="text-3xl lg:text-4xl font-bold mb-3 text-gray-900 leading-tight">
-              {product.name}
+              {language === "es" && product.name_es
+                ? product.name_es
+                : product.name}
             </h1>
 
             {/* Mock Rating */}
@@ -155,7 +163,9 @@ const DetailProduct = () => {
                   <FaStar key={i} className="text-yellow-400" size={18} />
                 ))}
               </div>
-              <span className="text-sm text-gray-600">(4.8 - 124 reviews)</span>
+              <span className="text-sm text-gray-600">
+                (4.8 - 124 {t.reviews})
+              </span>
             </div>
 
             {/* Status Badges */}
@@ -163,16 +173,16 @@ const DetailProduct = () => {
               {product.stock > 0 ? (
                 <div className="badge bg-green-100 text-green-700 border-0 gap-2 px-3 py-3 font-semibold">
                   <FiCheck className="w-4 h-4" />
-                  In Stock
+                  {t.inStock}
                 </div>
               ) : (
                 <div className="badge bg-red-100 text-red-700 border-0 px-3 py-3 font-semibold">
-                  Out of Stock
+                  {t.outOfStock}
                 </div>
               )}
               {product.stock > 0 && product.stock <= 5 && (
                 <div className="badge bg-orange-100 text-orange-700 border-0 px-3 py-3 font-semibold">
-                  Only {product.stock} left!
+                  {t.onlyLeft} {product.stock}!
                 </div>
               )}
             </div>
@@ -203,10 +213,10 @@ const DetailProduct = () => {
           {/* Description */}
           <div className="bg-white p-6 rounded-xl border border-gray-100">
             <h3 className="text-lg font-bold mb-3 text-gray-900">
-              Description
+              {t.description}
             </h3>
             <p className="text-base text-gray-700 leading-relaxed">
-              {product.description}
+              {language === "es" ? product.description_es : product.description}
             </p>
           </div>
 
@@ -216,38 +226,36 @@ const DetailProduct = () => {
               <FiTruck className="text-blue-600 text-xl mt-1 flex-shrink-0" />
               <div>
                 <h4 className="font-semibold text-gray-900 mb-1">
-                  Free Shipping
+                  {t.freeShipping}
                 </h4>
-                <p className="text-sm text-gray-600">On orders over $50</p>
+                <p className="text-sm text-gray-600">{t.freeShippingDesc}</p>
               </div>
             </div>
             <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
               <FiShield className="text-blue-600 text-xl mt-1 flex-shrink-0" />
               <div>
                 <h4 className="font-semibold text-gray-900 mb-1">
-                  Secure Payment
+                  {t.securePayment}
                 </h4>
-                <p className="text-sm text-gray-600">
-                  100% secure transactions
-                </p>
+                <p className="text-sm text-gray-600">{t.securePaymentDesc}</p>
               </div>
             </div>
             <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
               <FiPackage className="text-blue-600 text-xl mt-1 flex-shrink-0" />
               <div>
                 <h4 className="font-semibold text-gray-900 mb-1">
-                  Easy Returns
+                  {t.easyReturns}
                 </h4>
-                <p className="text-sm text-gray-600">30-day return policy</p>
+                <p className="text-sm text-gray-600">{t.easyReturnsDesc}</p>
               </div>
             </div>
             <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
               <FiCheck className="text-blue-600 text-xl mt-1 flex-shrink-0" />
               <div>
                 <h4 className="font-semibold text-gray-900 mb-1">
-                  Quality Guarantee
+                  {t.qualityGuarantee}
                 </h4>
-                <p className="text-sm text-gray-600">Verified products</p>
+                <p className="text-sm text-gray-600">{t.verifiedProducts}</p>
               </div>
             </div>
           </div>
@@ -256,10 +264,10 @@ const DetailProduct = () => {
           {product.stock > 0 && (
             <div className="flex items-center justify-between p-4 bg-blue-50 rounded-xl border border-blue-100">
               <span className="text-gray-700 font-medium">
-                Available Stock:
+                {t.availableStock}:
               </span>
               <span className="font-bold text-xl text-blue-600">
-                {product.stock} units
+                {product.stock} {t.units}
               </span>
             </div>
           )}
@@ -270,7 +278,7 @@ const DetailProduct = () => {
               {/* Quantity Selector */}
               <div className="flex items-center">
                 <label className="text-sm font-medium text-gray-700 mr-3">
-                  Quantity:
+                  {t.quantity}:
                 </label>
                 <div className="flex items-center border-2 border-gray-300 rounded-lg overflow-hidden">
                   <button
@@ -315,12 +323,12 @@ const DetailProduct = () => {
                 {addedSuccess ? (
                   <>
                     <FiCheck className="w-5 h-5" />
-                    Added to Cart!
+                    {t.addedToCart}
                   </>
                 ) : (
                   <>
                     <FiShoppingCart className="w-5 h-5" />
-                    Add to Cart
+                    {t.addToCart}
                   </>
                 )}
               </button>

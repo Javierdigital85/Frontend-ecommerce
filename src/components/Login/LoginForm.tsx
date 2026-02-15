@@ -6,6 +6,7 @@ import { loginService } from "../../services/authService";
 import { useUser } from "../../context/useUser";
 import toast from "react-hot-toast";
 import { Navigate } from "react-router";
+import { useTranslation } from "../../hook/useTranslation";
 
 const LoginForm = () => {
   const {
@@ -19,14 +20,15 @@ const LoginForm = () => {
   const { userInfo, setUserInfo } = useUser();
   const [openEye, setOpenEye] = useState(false);
   const [redirect, setRedirect] = useState(false);
+  const { t } = useTranslation();
 
   const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
     const result = await loginService(data, reset, setRedirect, setUserInfo);
 
     if (result?.success) {
-      toast.success(result.message);
+      toast.success(`${t.loginSuccess}`);
     } else if (result) {
-      toast.error(result.message);
+      toast.error(`${t.loginError}`);
     }
   };
 
@@ -47,23 +49,23 @@ const LoginForm = () => {
       <div>
         <input
           {...register("email", {
-            required: "El email es requerido",
+            required: `${t.emailRequired}`,
             pattern: {
               value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-              message: "Correo electronico invalido",
+              message: `${t.emailInvalid}`,
             },
             minLength: {
               value: 6,
-              message: "minimo de 6 caracteres",
+              message: `${t.emailMinLength}`,
             },
             maxLength: {
               value: 254,
-              message: "maximo de 254 caracteres",
+              message: `${t.emailMaxLength}`,
             },
           })}
           autoComplete="email"
           type="email"
-          placeholder="Correo electronico"
+          placeholder={t.emailPlaceholder}
           className={`p-2 outline-2 rounded border focus:outline-primary w-full ${
             errors.email
               ? "border-red-500 outline-red-500 focus:outline-red-500"
@@ -80,18 +82,18 @@ const LoginForm = () => {
       <div className="relative">
         <input
           {...register("password", {
-            required: "contraseña requerida",
+            required: `${t.passwordRequired}`,
             minLength: {
               value: 6,
-              message: "Minimo de 6 caracteres",
+              message: `${t.passwordMinLength}`,
             },
             maxLength: {
               value: 254,
-              message: "Maximo de 254 caracteres",
+              message: `${t.passwordMaxLength}`,
             },
           })}
           type={openEye ? "text" : "password"}
-          placeholder="Contraseña"
+          placeholder={t.passwordPlaceholder}
           className={`p-2 outline-2 rounded border focus:outline-primary w-full ${
             errors.password
               ? "border-red-500 outline-red-500 focus:outline-red-500"
@@ -115,7 +117,7 @@ const LoginForm = () => {
         className="btn bg-blue-600 hover:bg-blue-700 text-white"
         type="submit"
       >
-        Iniciar Sesión
+        {t.loginButton}
       </button>
     </form>
   );

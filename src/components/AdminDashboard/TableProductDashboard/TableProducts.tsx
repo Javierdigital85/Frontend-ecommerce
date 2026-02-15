@@ -145,7 +145,7 @@ const TableProducts = ({ products }: TableProductsProps) => {
                         {product.discountPercentage}% OFF
                       </span>
                       <button
-                        className="btn btn-xs bg-red-500 hover:bg-red-700 text-white border-none p-2"
+                        className="btn btn-xs bg-red-500 hover:bg-red-600 text-white border-none p-2"
                         onClick={() => removeDiscount(product._id)}
                       >
                         Cancel

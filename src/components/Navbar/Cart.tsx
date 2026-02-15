@@ -1,9 +1,11 @@
 import { FiShoppingCart } from "react-icons/fi";
 import ModalCart from "./ModalCart";
 import { useCart } from "../../context/useCart";
+import { useTranslation } from "../../hook/useTranslation";
 
 const Cart = () => {
   const { total, itemsQuantity, openModal, isModalOpen } = useCart();
+  const { t } = useTranslation();
 
   console.log("total carttt", total, "itemsQuantity carttt", itemsQuantity);
 
@@ -45,7 +47,7 @@ const Cart = () => {
                   className="btn bg-blue-600 hover:bg-blue-700 text-white btn-block"
                   onClick={handleViewCart}
                 >
-                  View cart
+                  {t.viewCart}
                 </button>
               </div>
             </div>

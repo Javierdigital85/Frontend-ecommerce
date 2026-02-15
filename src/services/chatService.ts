@@ -3,11 +3,11 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 const TIMEOUT_MS = 60_000; // 60s timeout for AI responses
 
-export const postMessage = async (message: string) => {
+export const postMessage = async (message: string, language: string) => {
   try {
     const response = await axios.post(
       `${API_URL}/chat`,
-      { message },
+      { message, language },
       { timeout: TIMEOUT_MS },
     );
     return response.data;
@@ -22,11 +22,15 @@ export const postMessage = async (message: string) => {
   }
 };
 
-export const postThreadId = async (threadId: string, message: string) => {
+export const postThreadId = async (
+  threadId: string,
+  message: string,
+  language: string,
+) => {
   try {
     const response = await axios.post(
       `${API_URL}/chat/${threadId}`,
-      { message },
+      { message, language },
       { timeout: TIMEOUT_MS },
     );
     return response.data;

@@ -2,11 +2,13 @@ import { useState } from "react";
 import CardProduct from "../components/CardProduct/CardProduct";
 import { useProduct } from "../context/useProduct";
 import { FiSearch, FiFilter } from "react-icons/fi";
+import { useTranslation } from "../hook/useTranslation";
 
 const Home = () => {
   const { products, productsLoading, error } = useProduct();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("default");
+  const { t } = useTranslation();
 
   // Filter and sort products based on search
   let filteredProducts = products.filter((product) => {
@@ -39,10 +41,10 @@ const Home = () => {
         <div className="relative px-6 py-16 md:py-24 lg:py-10">
           <div className="max-w-5xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight">
-              Discover Amazing Musical Products
+              {t.hero.title}
             </h1>
             <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Shop the latest guitars with exclusive deals and fast shipping
+              {t.hero.subtitle}
             </p>
 
             {/* Search Bar in Hero */}
@@ -51,7 +53,7 @@ const Home = () => {
                 <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
                 <input
                   type="text"
-                  placeholder="Search for products..."
+                  placeholder={t.searchPlaceholder}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-12 pr-4 py-4 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-lg text-base md:text-lg"
@@ -73,24 +75,24 @@ const Home = () => {
             <FiFilter className="text-gray-600" />
             <h2 className="text-lg font-semibold text-gray-700">
               {filteredProducts.length}{" "}
-              {filteredProducts.length === 1 ? "Product" : "Products"}
+              {filteredProducts.length === 1 ? t.product : t.products}
             </h2>
           </div>
 
           {/* Sort Options */}
           <div className="flex items-center gap-3">
             <label className="text-sm font-medium text-gray-600">
-              Sort by:
+              {t.sortBy}
             </label>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
             >
-              <option value="default">Default</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="discount">Best Discount</option>
+              <option value="default">{t.sortDefault}</option>
+              <option value="price-low">{t.sortPriceLow}</option>
+              <option value="price-high">{t.sortPriceHigh}</option>
+              <option value="discount">{t.sortDiscount}</option>
             </select>
           </div>
         </div>
@@ -102,7 +104,7 @@ const Home = () => {
           <div className="flex flex-col items-center justify-center py-20">
             <span className="loading loading-spinner loading-lg text-blue-600"></span>
             <p className="mt-4 text-gray-600 font-medium">
-              Loading products...
+              {t.loadingProducts}
             </p>
           </div>
         ) : error ? (
@@ -111,9 +113,9 @@ const Home = () => {
               <span className="text-3xl">⚠️</span>
             </div>
             <p className="text-xl font-semibold text-gray-800 mb-2">
-              Error loading products
+              {t.errorLoading}
             </p>
-            <p className="text-gray-600">Please try again later</p>
+            <p className="text-gray-600">{t.tryAgain}</p>
           </div>
         ) : filteredProducts.length === 0 ? (
           <div className="text-center py-20">
@@ -121,11 +123,9 @@ const Home = () => {
               <span className="text-3xl">🔍</span>
             </div>
             <p className="text-xl font-semibold text-gray-800 mb-2">
-              No products found
+              {t.noProductsFound}
             </p>
-            <p className="text-gray-600">
-              Try adjusting your search or filters
-            </p>
+            <p className="text-gray-600">{t.adjustFilters}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">

@@ -5,10 +5,14 @@ import UserDropDown from "./UserDropDown";
 import { useUser } from "../../context/useUser";
 import { FiMenu } from "react-icons/fi";
 import { useState } from "react";
+import { useLanguage } from "../../context/useLanguage";
+import { useTranslation } from "../../hook/useTranslation";
 
 const Navbar = () => {
   const { loading, userInfo } = useUser();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { language, toggleLanguage } = useLanguage();
+  const { t } = useTranslation();
 
   return (
     <header className="sticky top-0 z-50 bg-base-100 shadow">
@@ -27,7 +31,7 @@ const Navbar = () => {
                 className="btn btn-info hover:text-white"
                 to="/admin/dashboard/products"
               >
-                Dashboard
+                {t.dashboard}
               </Link>
             )}
             {!loading && !userInfo?.id && <AuthButtons />}
@@ -38,6 +42,12 @@ const Navbar = () => {
 
           <Cart />
 
+          <button
+            className="btn btn-ghost btn-sm bg-green-100 p-2"
+            onClick={toggleLanguage}
+          >
+            {language === "en" ? "🇺🇸 en" : "🇦🇷 es"}
+          </button>
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

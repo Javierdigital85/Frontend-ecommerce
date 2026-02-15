@@ -6,6 +6,7 @@ import type { RegisterFormValues } from "../../interfaces/RegisterForm";
 import { registerService } from "../../services/authService";
 import { Navigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useTranslation } from "../../hook/useTranslation";
 
 const RegisterForm = () => {
   const {
@@ -21,19 +22,20 @@ const RegisterForm = () => {
   // const { userInfo, checkSession } = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
   const [redirect, setRedirect] = useState(false);
+  const { t } = useTranslation();
 
   const onSubmit: SubmitHandler<RegisterFormValues> = async (data) => {
     const result = await registerService(
       data,
       reset,
       setRedirect,
-      checkSession
+      checkSession,
     );
 
     if (result?.message) {
-      toast.success("Registro existoso!");
+      toast.success(`${t.registerSuccess}`);
     } else {
-      toast.error("Error al registrarse");
+      toast.error(`${t.registerError}`);
     }
 
     console.log(result);
@@ -67,19 +69,19 @@ const RegisterForm = () => {
             Qué es: Las reglas de validación y configuración
             Para qué sirve: Definir cómo validar el campo
             */
-            required: "El nombre de usuario es requerido",
+            required: `${t.usernameRequired}`,
             minLength: {
               value: 3,
-              message: "Mínimo 3 caracteres",
+              message: `${t.usernameMinLength}`,
             },
             maxLength: {
               value: 20,
-              message: "Máximo 20 caracteres",
+              message: `${t.usernameMaxLength}`,
             },
           })}
           // HTML NATIVO (fuera del register)
           type="text"
-          placeholder="Nombre de usuario"
+          placeholder={t.usernamePlaceholder}
           autoComplete="usernames"
           className={`p-2 outline-2 rounded border focus:outline-primary w-full ${
             errors.username
@@ -98,23 +100,23 @@ const RegisterForm = () => {
         <input
           //el spread operator expande el objeto register
           {...register("email", {
-            required: "El email es requerido",
+            required: `${t.emailRequired}`,
             pattern: {
               value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
               message: "Correo electronico invalido",
             },
             minLength: {
               value: 6,
-              message: "minimo 6 caracteres",
+              message: `${t.emailMinLength}`,
             },
             maxLength: {
               value: 254,
-              message: "maximo 254 caracteres",
+              message: `${t.emailMaxLength}`,
             },
           })}
           autoComplete="email"
           type="email"
-          placeholder="Correo electronico"
+          placeholder={t.emailPlaceholder}
           name="email"
           className={`p-2 outline-2 rounded border focus:outline-primary w-full ${
             errors.email
@@ -132,19 +134,18 @@ const RegisterForm = () => {
       <div className="relative">
         <input
           {...register("password", {
-            required:
-              "La contraseña es requerida [6-20 caracteres de longitud]",
+            required: `${t.passwordRequired}`,
             minLength: {
               value: 6,
-              message: "Mínimo 6 caracteres",
+              message: `${t.passwordMinLength}`,
             },
             maxLength: {
               value: 254,
-              message: "Maximo de 254 caracteres",
+              message: `${t.passwordMaxLength}`,
             },
           })}
           type={showPassword ? "text" : "password"}
-          placeholder="contraseña"
+          placeholder={t.passwordPlaceholder}
           autoCapitalize="current-password"
           className={`p-2 outline-2 rounded border focus:outline-primary w-full ${
             errors.password
@@ -168,8 +169,11 @@ const RegisterForm = () => {
           </p>
         )}
       </div>
-      <button className="btn bg-blue-600 hover:bg-blue-700 text-white" type="submit">
-        Registrarse
+      <button
+        className="btn bg-blue-600 hover:bg-blue-700 text-white"
+        type="submit"
+      >
+        {t.register}
       </button>
     </form>
   );

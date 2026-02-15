@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { FaRobot, FaPaperPlane, FaTimes, FaCommentDots } from "react-icons/fa";
 import type { Message } from "../../interfaces/Chat";
 import { postMessage, postThreadId } from "../../services/chatService";
+import { useLanguage } from "../../context/useLanguage";
 
 const TypingIndicator = () => (
   <div className="mb-3 flex justify-start">
@@ -27,18 +28,25 @@ const formatTime = (date: Date) =>
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      text: "Hi! I'm your shopping assistant. How can I help you today? 🛍️",
-      isAgent: true,
-      timestamp: new Date(),
-    },
-  ]);
+  const { language } = useLanguage();
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [threadId, setThreadId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const initialMessage = {
+      text:
+        language === "es"
+          ? "¡Hola! Soy tu asistente de compras. ¿Cómo puedo ayudarte hoy? 🛍️"
+          : "Hi! I'm your shopping assistant. How can I help you today? 🛍️",
+      isAgent: true,
+      timestamp: new Date(),
+    };
+    setMessages([initialMessage]);
+  }, [language]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -66,9 +74,9 @@ const ChatWidget = () => {
     try {
       let data;
       if (threadId) {
-        data = await postThreadId(threadId, userMessage);
+        data = await postThreadId(threadId, userMessage, language);
       } else {
-        data = await postMessage(userMessage);
+        data = await postMessage(userMessage, language);
         setThreadId(data.threadId);
       }
 

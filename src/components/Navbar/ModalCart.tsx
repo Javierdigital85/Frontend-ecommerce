@@ -4,6 +4,7 @@ import { FiX } from "react-icons/fi";
 import { useCart } from "../../context/useCart";
 import { Link } from "react-router";
 import { useState } from "react";
+import { useTranslation } from "../../hook/useTranslation";
 
 const ModalCart = () => {
   const {
@@ -19,6 +20,7 @@ const ModalCart = () => {
   } = useCart();
 
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const { t } = useTranslation();
 
   if (!isModalOpen) return null;
 
@@ -30,7 +32,7 @@ const ModalCart = () => {
           <div className="flex items-center gap-3">
             <FaShoppingCart className="text-2xl" />
             <div>
-              <h3 className="font-bold text-xl">Shopping Cart</h3>
+              <h3 className="font-bold text-xl">{t.shoppingCart}</h3>
               <p className="text-sm text-blue-100">
                 {itemsQuantity} {itemsQuantity === 1 ? "item" : "items"}
               </p>
@@ -52,17 +54,15 @@ const ModalCart = () => {
           <div className="text-center py-16 px-6">
             <div className="text-6xl mb-4">🛒</div>
             <h4 className="text-xl font-bold text-gray-900 mb-2">
-              Your cart is empty
+              {t.cartEmpty}
             </h4>
-            <p className="text-gray-500 mb-6">
-              Add some products to get started!
-            </p>
+            <p className="text-gray-500 mb-6">{t.addProductsToStart}</p>
             <Link
               to="/"
               onClick={closeModal}
               className="btn bg-blue-600 hover:bg-blue-700 text-white"
             >
-              Start Shopping
+              {t.startShopping}
             </Link>
           </div>
         ) : (

@@ -4,6 +4,8 @@ import { FaShoppingCart, FaEye } from "react-icons/fa";
 import { FiCheck } from "react-icons/fi";
 import type { CardProductProps } from "../../interfaces/Product";
 import { useState } from "react";
+import { useLanguage } from "../../context/useLanguage";
+import { useTranslation } from "../../hook/useTranslation";
 
 const CardProduct = ({ product }: CardProductProps) => {
   const {
@@ -18,7 +20,8 @@ const CardProduct = ({ product }: CardProductProps) => {
   } = product;
   const { addToCart, loading } = useCart();
   const [isAdded, setIsAdded] = useState(false);
-
+  const { language } = useLanguage();
+  console.log("Current language:", language);
   const handleAddToCart = async () => {
     await addToCart(
       {
@@ -38,7 +41,7 @@ const CardProduct = ({ product }: CardProductProps) => {
 
   const finalPrice = discountedPrice || price;
   const hasDiscount = (discountPercentage ?? 0) > 0;
-
+  const { t } = useTranslation();
   return (
     <div className="card bg-white w-full max-w-sm shadow-lg hover:shadow-2xl transition-all duration-300 group border border-gray-100 overflow-hidden">
       {/* Imagen */}
@@ -60,7 +63,7 @@ const CardProduct = ({ product }: CardProductProps) => {
           )}
           {stock > 0 && stock <= 5 && (
             <span className="badge bg-orange-500 text-white font-semibold px-3 py-2 border-0">
-              Only {stock} left!
+              {t.onlyLeft} {stock}!
             </span>
           )}
         </div>
@@ -69,7 +72,7 @@ const CardProduct = ({ product }: CardProductProps) => {
         {stock === 0 && (
           <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
             <span className="badge badge-lg bg-gray-800 text-white font-bold px-4 py-3 border-0">
-              Out of Stock
+              {t.outOfStock}
             </span>
           </div>
         )}
@@ -80,7 +83,7 @@ const CardProduct = ({ product }: CardProductProps) => {
             to={`/detailProduct/${_id}`}
             className="btn btn-sm bg-blue text-gray-900 hover:bg-gray-300 border-0 gap-2"
           >
-            <FaEye /> Quick View
+            <FaEye /> {t.viewDetails}
           </Link>
         </div>
       </figure>
@@ -90,13 +93,13 @@ const CardProduct = ({ product }: CardProductProps) => {
         {/* Title */}
         <Link to={`/detailProduct/${_id}`}>
           <h2 className="card-title text-base font-bold line-clamp-2 hover:text-blue-600 transition-colors min-h-[3rem]">
-            {name}
+            {language === "en" ? product.name : product.name_es}
           </h2>
         </Link>
 
         {/* Description */}
         <p className="text-sm text-gray-600 line-clamp-2 min-h-[2.5rem]">
-          {description}
+          {language === "en" ? product.description : product.description_es}
         </p>
 
         {/* Price Section */}
@@ -122,7 +125,7 @@ const CardProduct = ({ product }: CardProductProps) => {
           <div className="flex items-center gap-2 text-sm">
             <FiCheck className="text-green-600" />
             <span className="text-green-600 font-medium">
-              {stock > 10 ? "In Stock" : `${stock} available`}
+              {stock > 10 ? `` : `${stock}`} {t.availableStock}
             </span>
           </div>
         )}
@@ -141,12 +144,12 @@ const CardProduct = ({ product }: CardProductProps) => {
             {isAdded ? (
               <>
                 <FiCheck size={18} />
-                Added to Cart!
+                {t.addedToCart}
               </>
             ) : (
               <>
                 <FaShoppingCart size={16} />
-                Add to Cart
+                {t.addToCart}
               </>
             )}
           </button>
