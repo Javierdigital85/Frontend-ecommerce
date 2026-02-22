@@ -612,7 +612,7 @@ const Checkout = () => {
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <span className="text-lg">🔒</span>
                 <span className="font-medium">
-                  Secure checkout powered by Stripe
+                  Secure checkout powered by Mercado Pago
                 </span>
               </div>
             </div>

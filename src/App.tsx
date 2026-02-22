@@ -15,6 +15,7 @@ import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFailure from "./pages/PaymentFailure";
 import PaymentPending from "./pages/PaymentPending";
 import Profile from "./pages/Profile";
+import Orders from "./pages/Orders";
 import { LanguageProvider } from "./context/LanguageContext";
 
 function App() {
@@ -31,19 +32,20 @@ function App() {
                 <Route path="/profile" element={<Profile />}></Route>
                 <Route path="/detailProduct/:id" element={<DetailProduct />} />
                 <Route path="/checkout" element={<Checkout />} />
+                <Route path="/orders" element={<Orders />} />
                 <Route path="/payment/success" element={<PaymentSuccess />} />
                 <Route path="/payment/failure" element={<PaymentFailure />} />
                 <Route path="/payment/pending" element={<PaymentPending />} />
-
-                <Route
-                  path="/admin/dashboard/*"
-                  element={
-                    <ProtectedRoute>
-                      <AdminDashboard />
-                    </ProtectedRoute>
-                  }
-                />
               </Route>
+
+              <Route
+                path="/admin/dashboard/*"
+                element={
+                  <ProtectedRoute>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </CartContextProvider>
         </ProductContextProvider>

@@ -115,6 +115,64 @@ export const translations = {
     loginButton: "Login",
     loginSuccess: "Login successful!",
     loginError: "Login failed",
+
+    // UserDropDown
+    settings: "Settings",
+    logoutSuccess: "You have logged out",
+    logoutError: "Error logging out",
+
+    // Dashboard Layout
+    adminDashboard: "Admin Dashboard",
+    backToStore: "Back to Store",
+
+    // Dashboard - Product Table
+    productManagement: "Product Management",
+    productManagementDesc: "Manage your product inventory and pricing",
+    searchProducts: "Search products...",
+    resultsFound: "result(s) found",
+    createProduct: "Create Product",
+    updateProduct: "Update Product",
+    totalProducts: "Total Products",
+    inventoryValue: "Inventory Value",
+    withDiscounts: "With Discounts",
+
+    // Dashboard - Table Headers
+    tableProduct: "Product",
+    tableDescription: "Description",
+    tablePrice: "Price",
+    tableDiscount: "Discount",
+    tableStock: "Stock",
+    tableImageUrl: "Image URL",
+    tableActions: "Actions",
+
+    // Dashboard - Table Actions
+    apply: "Apply",
+    deleteProductConfirm: "Do you want to delete this product?",
+    yesDeleteProduct: "Yes, delete product",
+    discountMustBe: "Discount must be between 0 and 100",
+    discountApplied: "Discount applied successfully",
+    errorApplyingDiscount: "Error applying discount",
+    discountRemoved: "Discount removed successfully",
+    errorCancelingDiscount: "Error canceling discount",
+
+    // Dashboard - Users Table
+    usersTitle: "Users",
+    role: "Role",
+    adminRole: "Admin",
+    userRole: "User",
+
+    // Dashboard - Create/Update Product Form
+    productName: "Product Name",
+    productNameRequired: "Product name is required",
+    descriptionRequired: "Description is required",
+    priceRequired: "Price is required",
+    priceMin: "Price must be greater than 0",
+    priceMinUpdate: "Price must be greater than 1",
+    stockRequired: "Stock is required",
+    stockMin: "Stock must be 0 or greater",
+    imageUrlRequired: "Image URL is required",
+    enterProductName: "Enter product name",
+    enterProductDescription: "Enter product description",
   },
   es: {
     // Navbar
@@ -233,5 +291,63 @@ export const translations = {
     loginButton: "Iniciar Sesión",
     loginSuccess: "Inicio de sesión exitoso!",
     loginError: "Error al iniciar sesión",
+
+    // UserDropDown
+    settings: "Configuración",
+    logoutSuccess: "Has cerrado sesión",
+    logoutError: "Error al cerrar sesión",
+
+    // Dashboard Layout
+    adminDashboard: "Panel de Administración",
+    backToStore: "Volver a la Tienda",
+
+    // Dashboard - Product Table
+    productManagement: "Gestión de Productos",
+    productManagementDesc: "Gestiona tu inventario de productos y precios",
+    searchProducts: "Buscar productos...",
+    resultsFound: "resultado(s) encontrado(s)",
+    createProduct: "Crear Producto",
+    updateProduct: "Actualizar Producto",
+    totalProducts: "Total de Productos",
+    inventoryValue: "Valor del Inventario",
+    withDiscounts: "Con Descuentos",
+
+    // Dashboard - Table Headers
+    tableProduct: "Producto",
+    tableDescription: "Descripción",
+    tablePrice: "Precio",
+    tableDiscount: "Descuento",
+    tableStock: "Stock",
+    tableImageUrl: "URL de Imagen",
+    tableActions: "Acciones",
+
+    // Dashboard - Table Actions
+    apply: "Aplicar",
+    deleteProductConfirm: "¿Quieres eliminar este producto?",
+    yesDeleteProduct: "Sí, eliminar producto",
+    discountMustBe: "El descuento debe estar entre 0 y 100",
+    discountApplied: "Descuento aplicado exitosamente",
+    errorApplyingDiscount: "Error al aplicar el descuento",
+    discountRemoved: "Descuento eliminado exitosamente",
+    errorCancelingDiscount: "Error al cancelar el descuento",
+
+    // Dashboard - Users Table
+    usersTitle: "Usuarios",
+    role: "Rol",
+    adminRole: "Administrador",
+    userRole: "Usuario",
+
+    // Dashboard - Create/Update Product Form
+    productName: "Nombre del Producto",
+    productNameRequired: "El nombre del producto es requerido",
+    descriptionRequired: "La descripción es requerida",
+    priceRequired: "El precio es requerido",
+    priceMin: "El precio debe ser mayor a 0",
+    priceMinUpdate: "El precio debe ser mayor a 1",
+    stockRequired: "El stock es requerido",
+    stockMin: "El stock debe ser 0 o mayor",
+    imageUrlRequired: "La URL de imagen es requerida",
+    enterProductName: "Ingresa el nombre del producto",
+    enterProductDescription: "Ingresa la descripción del producto",
   },
 };

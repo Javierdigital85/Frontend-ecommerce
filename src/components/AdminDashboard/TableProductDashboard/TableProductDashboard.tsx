@@ -6,11 +6,15 @@ import {
   FiDollarSign,
   FiTrendingDown,
   FiPlus,
+  FiSearch,
 } from "react-icons/fi";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { useTranslation } from "../../../hook/useTranslation";
 
 const TableProductDashboard = () => {
   const { products, productsLoading } = useProduct();
+  const [searchTerm, setSearchTerm] = useState("");
+  const { t } = useTranslation();
 
   // Calculate statistics
   const stats = useMemo(() => {
@@ -26,24 +30,48 @@ const TableProductDashboard = () => {
     return { totalProducts, totalValue, productsWithDiscount, outOfStock };
   }, [products]);
 
+  const filteredProducts = useMemo(() => {
+    if (!searchTerm.trim()) return products;
+    return products.filter((product) =>
+      product.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()),
+    );
+  }, [products, searchTerm]);
+
   return (
     <div className="space-y-6">
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">
-            Product Management
+            {t.productManagement}
           </h1>
           <p className="text-gray-600 mt-1">
-            Manage your product inventory and pricing
+            {t.productManagementDesc}
           </p>
+        </div>
+        <div className="flex flex-col">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder={t.searchProducts}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="input input-bordered w-full md:w-[500px] pl-10"
+            />
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
+          </div>
+          {searchTerm && (
+            <p className="text-sm text-gray-500 mt-1">
+              {filteredProducts.length} {t.resultsFound}
+            </p>
+          )}
         </div>
         <Link
           to="/admin/dashboard/products/createProduct"
           className="btn bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
         >
           <FiPlus className="text-lg" />
-          Create Product
+          {t.createProduct}
         </Link>
       </div>
 
@@ -54,7 +82,7 @@ const TableProductDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 font-medium">
-                  Total Products
+                  {t.totalProducts}
                 </p>
                 <p className="text-3xl font-bold text-gray-900 mt-2">
                   {stats.totalProducts}
@@ -69,7 +97,7 @@ const TableProductDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 font-medium">
-                  Inventory Value
+                  {t.inventoryValue}
                 </p>
                 <p className="text-3xl font-bold text-gray-900 mt-2">
                   ${stats.totalValue.toFixed(2)}
@@ -84,7 +112,7 @@ const TableProductDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 font-medium">
-                  With Discounts
+                  {t.withDiscounts}
                 </p>
                 <p className="text-3xl font-bold text-gray-900 mt-2">
                   {stats.productsWithDiscount}
@@ -99,7 +127,7 @@ const TableProductDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 font-medium">
-                  Out of Stock
+                  {t.outOfStock}
                 </p>
                 <p className="text-3xl font-bold text-gray-900 mt-2">
                   {stats.outOfStock}
@@ -120,7 +148,7 @@ const TableProductDashboard = () => {
             <div className="loading loading-spinner loading-lg text-blue-600"></div>
           </div>
         ) : (
-          <TableProducts products={products} />
+          <TableProducts products={filteredProducts} />
         )}
       </div>
     </div>

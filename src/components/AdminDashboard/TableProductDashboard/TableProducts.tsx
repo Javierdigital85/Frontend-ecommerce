@@ -5,6 +5,7 @@ import type { Product } from "../../../interfaces/Product";
 import { useState } from "react";
 import { applyDiscountService } from "../../../services/productService";
 import { FiEdit2, FiTrash2, FiPercent } from "react-icons/fi";
+import { useTranslation } from "../../../hook/useTranslation";
 
 interface TableProductsProps {
   products: Product[];
@@ -12,6 +13,7 @@ interface TableProductsProps {
 
 const TableProducts = ({ products }: TableProductsProps) => {
   const { deleteProduct, getProducts } = useProduct();
+  const { t } = useTranslation();
   const [discountInputs, setDiscountInputs] = useState<{
     [key: string]: string;
   }>({});
@@ -35,29 +37,29 @@ const TableProducts = ({ products }: TableProductsProps) => {
   const applyDiscount = async (productId: string) => {
     const discount = parseFloat(discountInputs[productId] || "0");
     if (discount < 0 || discount > 100) {
-      toast.error("Discount must be between 0 and 100");
+      toast.error(t.discountMustBe);
       return;
     }
 
     try {
       await applyDiscountService(productId, discount);
-      toast.success("Discount applied successfully");
+      toast.success(t.discountApplied);
       getProducts();
       setDiscountInputs((prev) => ({ ...prev, [productId]: "" }));
     } catch (error) {
       console.error(error);
-      toast.error("Error applying discount");
+      toast.error(t.errorApplyingDiscount);
     }
   };
 
   const removeDiscount = async (productId: string) => {
     try {
       await applyDiscountService(productId, 0);
-      toast.success("Discount removed successfully");
+      toast.success(t.discountRemoved);
       getProducts();
     } catch (error) {
       console.error(error);
-      toast.error("Error canceling discount");
+      toast.error(t.errorCancelingDiscount);
     }
   };
 
@@ -67,14 +69,14 @@ const TableProducts = ({ products }: TableProductsProps) => {
         <thead className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
           <tr>
             <th className="text-center">#</th>
-            <th>Product</th>
-            <th className="hidden lg:table-cell">Description</th>
-            <th>Price</th>
-            <th>Discount</th>
-            <th className="text-center">Stock</th>
-            <th className="hidden xl:table-cell">Image URL</th>
+            <th>{t.tableProduct}</th>
+            <th className="hidden lg:table-cell">{t.tableDescription}</th>
+            <th>{t.tablePrice}</th>
+            <th>{t.tableDiscount}</th>
+            <th className="text-center">{t.tableStock}</th>
+            <th className="hidden xl:table-cell">{t.tableImageUrl}</th>
             <th className="text-center" colSpan={2}>
-              Actions
+              {t.tableActions}
             </th>
           </tr>
         </thead>
@@ -133,9 +135,9 @@ const TableProducts = ({ products }: TableProductsProps) => {
                     <button
                       className="btn btn-sm bg-green-600 hover:bg-green-700 text-white border-none p-2"
                       onClick={() => applyDiscount(product._id)}
-                      title="Apply discount"
+                      title={t.apply}
                     >
-                      Apply
+                      {t.apply}
                       <FiPercent />
                     </button>
                   </div>
@@ -148,7 +150,7 @@ const TableProducts = ({ products }: TableProductsProps) => {
                         className="btn btn-xs bg-red-500 hover:bg-red-600 text-white border-none p-2"
                         onClick={() => removeDiscount(product._id)}
                       >
-                        Cancel
+                        {t.cancel}
                       </button>
                     </div>
                   )}
@@ -164,7 +166,7 @@ const TableProducts = ({ products }: TableProductsProps) => {
                         : "bg-green-100 text-green-700"
                   }`}
                 >
-                  {product.stock === 0 ? "Out of Stock" : product.stock}
+                  {product.stock === 0 ? t.outOfStock : product.stock}
                 </span>
               </td>
               <td className="hidden xl:table-cell max-w-[200px]">
@@ -205,7 +207,7 @@ const TableProducts = ({ products }: TableProductsProps) => {
       {showClearConfirm && (
         <div className="modal modal-open">
           <div className="modal-box">
-            <h3>Do you want to delete this product?</h3>
+            <h3>{t.deleteProductConfirm}</h3>
             <div className="flex gap-3 justify-end">
               <button
                 className="btn btn-outline"
@@ -214,7 +216,7 @@ const TableProducts = ({ products }: TableProductsProps) => {
                   setProductToDelete(null);
                 }}
               >
-                Cancel
+                {t.cancel}
               </button>
               <button
                 className="btn bg-red-500 hover:bg-red-600 text-white p-2"
@@ -226,7 +228,7 @@ const TableProducts = ({ products }: TableProductsProps) => {
                   setProductToDelete(null);
                 }}
               >
-                Yes, delete product
+                {t.yesDeleteProduct}
               </button>
             </div>
           </div>

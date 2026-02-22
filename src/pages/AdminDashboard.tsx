@@ -3,6 +3,7 @@ import TableProductDashboard from "../components/AdminDashboard/TableProductDash
 import DashboardLayout from "../Layout/DashboardLayout";
 import CreateProduct from "./CreateProduct";
 import UpdateProduct from "./UpdateProduct";
+import AdminUsers from "./AdminUsers";
 
 const AdminDashboard = () => {
   return (
@@ -10,12 +11,16 @@ const AdminDashboard = () => {
       <Routes>
         <Route element={<DashboardLayout />}>
           <Route path="/products" element={<TableProductDashboard />} />
-          <Route path="/products/createProduct" element={<CreateProduct/>}/>
-          <Route path="/products/updateProduct/:id" element={<UpdateProduct/>}/>
+          <Route path="/products/createProduct" element={<CreateProduct />} />
+          <Route
+            path="/products/updateProduct/:id"
+            element={<UpdateProduct />}
+          />
+          <Route path="/users" element={<AdminUsers />} />
         </Route>
       </Routes>
     </section>
   );
 };
 
-export default AdminDashboard
+export default AdminDashboard;

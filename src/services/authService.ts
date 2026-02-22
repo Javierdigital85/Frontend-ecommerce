@@ -27,7 +27,7 @@ export const loginService = async (
   data: LoginFormValues,
   reset: UseFormReset<LoginFormValues>,
   setRedirect: (redirect: boolean) => void,
-  setUserInfo: (userInfo: UserInfo) => void
+  setUserInfo: (userInfo: UserInfo) => void,
 ) => {
   try {
     const response = await axios.post(`${API_URL}/login`, data, {
@@ -57,7 +57,7 @@ export const registerService = async (
   data: RegisterFormValues,
   reset: UseFormReset<RegisterFormValues>,
   setRedirect: (redirect: boolean) => void,
-  checkSession: () => Promise<void>
+  checkSession: () => Promise<void>,
 ) => {
   try {
     const response = await axios.post(`${API_URL}/register`, data, {
@@ -92,12 +92,15 @@ export const logOutService = async () => {
       message?: string;
     }>;
     throw new Error(
-      axiosError.response?.data?.message || "Error al cerrar la sesión"
+      axiosError.response?.data?.message || "Error al cerrar la sesión",
     );
   }
 };
 
-export const updateUserService = async (userId: string, userData: Partial<UserInfo>) => {
+export const updateUserService = async (
+  userId: string,
+  userData: Partial<UserInfo>,
+) => {
   try {
     const res = await axios.put(`${API_URL}/updateUser/${userId}`, userData, {
       headers: { "Content-Type": "application/json" },
@@ -109,7 +112,22 @@ export const updateUserService = async (userId: string, userData: Partial<UserIn
       message?: string;
     }>;
     throw new Error(
-      axiosError.response?.data?.message || "Error al actualizar el usuario"
+      axiosError.response?.data?.message || "Error al actualizar el usuario",
+    );
+  }
+};
+
+export const getUsersService = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/users`);
+    console.log("Respuesta /users", response);
+    return response.data;
+  } catch (error) {
+    const axiosError = error as import("axios").AxiosError<{
+      message?: string;
+    }>;
+    throw new Error(
+      axiosError.response?.data?.message || "Error al obtener los usuarios",
     );
   }
 };

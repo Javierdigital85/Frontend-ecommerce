@@ -5,6 +5,11 @@ const API_URL = import.meta.env.VITE_BACKEND_URL + "/orders";
 
 axios.defaults.withCredentials = true;
 
+export const getMyOrders = async () => {
+  const response = await axios.get(`${API_URL}/my-orders`);
+  return response.data;
+};
+
 export const createOrder = async (orderData: CreateOrderData) => {
   try {
     console.log("🟡 [ORDER SERVICE] Enviando petición a:", `${API_URL}/create`);

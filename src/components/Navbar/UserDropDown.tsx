@@ -2,19 +2,21 @@ import { Link } from "react-router-dom";
 import { useUser } from "../../context/useUser";
 import toast from "react-hot-toast";
 import { logOutService } from "../../services/authService";
+import { useTranslation } from "../../hook/useTranslation";
 
 const UserDropDown = () => {
   const { userInfo, setUserInfo } = useUser();
+  const { t } = useTranslation();
   console.log("Que tiene userInfooooo!!!", userInfo);
 
   const handleLogout = async () => {
     try {
       await logOutService();
       setUserInfo({});
-      toast.success("Has cerrado sesión");
+      toast.success(t.logoutSuccess);
     } catch (error) {
       console.log(error);
-      toast.error("Error al cerrar sesión");
+      toast.error(t.logoutError);
     }
   };
 
@@ -41,12 +43,12 @@ const UserDropDown = () => {
         </li> */}
         <li>
           <Link to="/profile" className="justify-between">
-            Configuración
+            {t.settings}
           </Link>
         </li>
         <li>
           <Link to="/" className="justify-between" onClick={handleLogout}>
-            Cerrar Sesión
+            {t.logout}
           </Link>
         </li>
       </ul>
