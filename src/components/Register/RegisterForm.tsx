@@ -4,7 +4,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import type { RegisterFormValues } from "../../interfaces/RegisterForm";
 import { registerService } from "../../services/authService";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useTranslation } from "../../hook/useTranslation";
 
@@ -12,10 +12,10 @@ const RegisterForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset,
   } = useForm<RegisterFormValues>({
-    mode: "onChange", //validación en tiempo real
+    mode: "onChange",
   });
 
   const { userInfo, checkSession } = useUser();
@@ -50,12 +50,12 @@ const RegisterForm = () => {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="mt-8 flex flex-col gap-4 lg:gap6 max-w-[500px] mx-auto"
-      action=""
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+      {/* Username */}
       <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+          {t.usernamePlaceholder}
+        </label>
         <input
           /*
         El primer parametro es "username".
@@ -70,111 +70,112 @@ const RegisterForm = () => {
             Para qué sirve: Definir cómo validar el campo
             */
             required: `${t.usernameRequired}`,
-            minLength: {
-              value: 3,
-              message: `${t.usernameMinLength}`,
-            },
-            maxLength: {
-              value: 20,
-              message: `${t.usernameMaxLength}`,
-            },
+            minLength: { value: 3, message: `${t.usernameMinLength}` },
+            maxLength: { value: 20, message: `${t.usernameMaxLength}` },
           })}
           // HTML NATIVO (fuera del register)
           type="text"
-          placeholder={t.usernamePlaceholder}
-          autoComplete="usernames"
-          className={`p-2 outline-2 rounded border focus:outline-primary w-full ${
+          placeholder="Ej: javier123"
+          autoComplete="username"
+          className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-colors text-sm ${
             errors.username
-              ? "border-red-500 outline-red-500 focus:outline-red-500"
-              : ""
+              ? "border-red-400 bg-red-50 focus:border-red-500"
+              : "border-gray-200 focus:border-blue-500 bg-gray-50 focus:bg-white"
           }`}
         />
         {errors.username && (
-          <p className="text-red-500 text-sm mt-2 ml-1">
-            {errors.username.message as string}
-          </p>
+          <p className="text-red-500 text-xs mt-1.5 ml-1">⚠ {errors.username.message as string}</p>
         )}
       </div>
 
+      {/* Email */}
       <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+          {t.emailPlaceholder}
+        </label>
         <input
           //el spread operator expande el objeto register
           {...register("email", {
             required: `${t.emailRequired}`,
             pattern: {
               value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-              message: "Correo electronico invalido",
+              message: "Correo electrónico inválido",
             },
-            minLength: {
-              value: 6,
-              message: `${t.emailMinLength}`,
-            },
-            maxLength: {
-              value: 254,
-              message: `${t.emailMaxLength}`,
-            },
+            minLength: { value: 6, message: `${t.emailMinLength}` },
+            maxLength: { value: 254, message: `${t.emailMaxLength}` },
           })}
           autoComplete="email"
           type="email"
-          placeholder={t.emailPlaceholder}
-          name="email"
-          className={`p-2 outline-2 rounded border focus:outline-primary w-full ${
+          placeholder="tu@email.com"
+          className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-colors text-sm ${
             errors.email
-              ? "border-red-500 outline-red-500 focus:outline-red-500"
-              : ""
+              ? "border-red-400 bg-red-50 focus:border-red-500"
+              : "border-gray-200 focus:border-blue-500 bg-gray-50 focus:bg-white"
           }`}
         />
         {errors.email && (
-          <p className="text-red-500 text-sm mt-2 ml-1">
-            {errors.email.message as string}
-          </p>
+          <p className="text-red-500 text-xs mt-1.5 ml-1">⚠ {errors.email.message as string}</p>
         )}
       </div>
 
-      <div className="relative">
-        <input
-          {...register("password", {
-            required: `${t.passwordRequired}`,
-            minLength: {
-              value: 6,
-              message: `${t.passwordMinLength}`,
-            },
-            maxLength: {
-              value: 254,
-              message: `${t.passwordMaxLength}`,
-            },
-          })}
-          type={showPassword ? "text" : "password"}
-          placeholder={t.passwordPlaceholder}
-          autoCapitalize="current-password"
-          className={`p-2 outline-2 rounded border focus:outline-primary w-full ${
-            errors.password
-              ? "border-red-500 outline-red-500 focus:outline-red-500"
-              : ""
-          }`}
-        />
-        <button
-          onClick={() => setShowPassword((prev) => !prev)}
-          aria-label={
-            showPassword ? "Ocultar contraseña" : "Mostrar constraseña"
-          }
-          type="button"
-          className="cursor-pointer absolute right-4 top-[20px] transform -translate-y-1/2 text-gray-600"
-        >
-          {showPassword ? <FaEye size={23} /> : <FaEyeSlash size={23} />}
-        </button>
+      {/* Password */}
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+          {t.passwordPlaceholder}
+        </label>
+        <div className="relative">
+          <input
+            {...register("password", {
+              required: `${t.passwordRequired}`,
+              minLength: { value: 6, message: `${t.passwordMinLength}` },
+              maxLength: { value: 254, message: `${t.passwordMaxLength}` },
+            })}
+            type={showPassword ? "text" : "password"}
+            placeholder="Mínimo 6 caracteres"
+            autoComplete="new-password"
+            className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-colors text-sm pr-12 ${
+              errors.password
+                ? "border-red-400 bg-red-50 focus:border-red-500"
+                : "border-gray-200 focus:border-blue-500 bg-gray-50 focus:bg-white"
+            }`}
+          />
+          <button
+            onClick={() => setShowPassword((prev) => !prev)}
+            aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+            type="button"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            {showPassword ? <FaEye size={18} /> : <FaEyeSlash size={18} />}
+          </button>
+        </div>
         {errors.password && (
-          <p className="text-red-500 text-sm mt-2 ml-1">
-            {errors.password.message as string}
-          </p>
+          <p className="text-red-500 text-xs mt-1.5 ml-1">⚠ {errors.password.message as string}</p>
         )}
       </div>
+
+      {/* Submit */}
       <button
-        className="btn bg-blue-600 hover:bg-blue-700 text-white"
         type="submit"
+        disabled={isSubmitting}
+        className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg mt-1"
       >
-        {t.register}
+        {isSubmitting ? (
+          <span className="flex items-center justify-center gap-2">
+            <span className="loading loading-spinner loading-sm"></span>
+            Creando cuenta...
+          </span>
+        ) : (
+          t.register
+        )}
       </button>
+
+      {/* Link a Login */}
+      <p className="text-center text-sm text-gray-500 mt-2">
+        ¿Ya tenés cuenta?{" "}
+        <Link to="/login" className="text-blue-600 font-semibold hover:underline">
+          Iniciar sesión
+        </Link>
+      </p>
     </form>
   );
 };

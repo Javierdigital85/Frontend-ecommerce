@@ -4,9 +4,9 @@ import ChatWidget from "../components/Chat/ChatWidget";
 
 const Layout = () => {
   return (
-    <div className="w-full max-w-[1400px] mx-auto px-6 pb-10 relative">
+    <div className="w-full relative">
       <Navbar />
-      <main>
+      <main className="max-w-[1400px] mx-auto px-6 pb-10">
         <Outlet />
       </main>
       <div className="fixed bottom-4 right-4 z-50">

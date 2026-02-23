@@ -135,46 +135,11 @@ const Checkout = () => {
         <p className="text-gray-600">Complete your purchase securely</p>
       </div>
 
-      {/* Progress Indicator */}
-      <div className="mb-8">
-        <div className="flex items-center justify-center gap-2 md:gap-4">
-          <div className="flex items-center">
-            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
-              1
-            </div>
-            <span className="ml-2 text-sm md:text-base font-medium text-blue-600">
-              Shipping
-            </span>
-          </div>
-          <div className="w-12 md:w-20 h-1 bg-gray-300"></div>
-          <div className="flex items-center">
-            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold">
-              2
-            </div>
-            <span className="ml-2 text-sm md:text-base font-medium text-gray-600">
-              Payment
-            </span>
-          </div>
-          <div className="w-12 md:w-20 h-1 bg-gray-300"></div>
-          <div className="flex items-center">
-            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold">
-              3
-            </div>
-            <span className="ml-2 text-sm md:text-base font-medium text-gray-600">
-              Confirm
-            </span>
-          </div>
-        </div>
-      </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Shipping Form */}
         <div className="lg:col-span-2 bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
-          <h2 className="text-2xl font-bold mb-6 text-gray-900 flex items-center gap-2">
-            <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-bold">
-              1
-            </span>
-            Shipping Information
+          <h2 className="text-2xl font-bold mb-6 text-gray-900">
+            Datos de Envío
           </h2>
 
           <form
@@ -526,12 +491,7 @@ const Checkout = () => {
         {/* Order Summary */}
         <div className="lg:col-span-1">
           <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 sticky top-24">
-            <h2 className="text-2xl font-bold mb-6 text-gray-900 flex items-center gap-2">
-              <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-bold">
-                2
-              </span>
-              Order Summary
-            </h2>
+            <h2 className="text-2xl font-bold mb-6 text-gray-900">Resumen</h2>
             <div className="space-y-4 mb-6">
               {cart.map((item) => (
                 <div
