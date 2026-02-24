@@ -7,11 +7,19 @@ export interface Product {
   discountPercentage?: number;
   discountedPrice?: number;
   stock: number;
-  imageUrl: string;
+  images: string[];
 }
 
-// CartItem for frontend use (extends Product with quantity)
-export interface CartItem extends Product {
+// CartItem for frontend use — imageUrl is a snapshot of images[0]
+export interface CartItem {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+  discountPercentage?: number;
+  discountedPrice?: number;
+  stock: number;
+  imageUrl: string;
   quantity: number;
 }
 

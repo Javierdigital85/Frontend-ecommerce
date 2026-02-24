@@ -11,7 +11,7 @@ const CardProduct = ({ product }: CardProductProps) => {
   const {
     name,
     price,
-    imageUrl,
+    images,
     description,
     _id,
     stock,
@@ -28,7 +28,7 @@ const CardProduct = ({ product }: CardProductProps) => {
         _id,
         name,
         price: discountedPrice || price,
-        imageUrl,
+        imageUrl: images?.[0] ?? "",
         description,
         stock,
         quantity: 1,
@@ -48,7 +48,7 @@ const CardProduct = ({ product }: CardProductProps) => {
       <figure className="relative overflow-hidden bg-gray-50 h-64">
         <Link to={`/detailProduct/${_id}`}>
           <img
-            src={imageUrl}
+            src={images?.[0]}
             alt={name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           />

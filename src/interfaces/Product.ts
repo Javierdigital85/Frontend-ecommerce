@@ -8,7 +8,9 @@ export interface Product {
   discountPercentage?: number;
   discountedPrice?: number;
   stock: number;
-  imageUrl: string;
+  images: string[];
+  videoUrl?: string | null;
+  videoSource?: "cloudinary" | "youtube" | null;
 }
 
 export interface ProductContextValue {
@@ -19,8 +21,13 @@ export interface ProductContextValue {
   error: string | null;
   getProducts: () => Promise<void>;
   getProductById: (id: string) => Promise<void>;
-  updateProduct: (id: string, data: Partial<Product>) => Promise<{ success: boolean; message: string }>;
-  createProduct: (data: Omit<Product, '_id'>) => Promise<{ success: boolean; message: string }>;
+  updateProduct: (
+    id: string,
+    data: Partial<Product>,
+  ) => Promise<{ success: boolean; message: string }>;
+  createProduct: (
+    data: Omit<Product, "_id">,
+  ) => Promise<{ success: boolean; message: string }>;
   deleteProduct: (id: string) => Promise<{ success: boolean; message: string }>;
 }
 

@@ -56,7 +56,9 @@ export const ProductContextProvider = ({ children }: { children: ReactNode }) =>
       description: data.description,
       price: Number(data.price),
       stock: Number(data.stock),
-      imageUrl: data.imageUrl,
+      images: data.images,
+      videoUrl: data.videoUrl || null,
+      videoSource: data.videoUrl ? data.videoSource : null,
     };
 
     try {
@@ -101,7 +103,9 @@ export const ProductContextProvider = ({ children }: { children: ReactNode }) =>
       description: data.description,
       price: Number(data.price),
       stock: Number(data.stock),
-      imageUrl: data.imageUrl,
+      images: data.images,
+      videoUrl: data.videoUrl || null,
+      videoSource: data.videoUrl ? data.videoSource : null,
     };
     try {
       const response = await axios.post(API_URL, cleanData, {

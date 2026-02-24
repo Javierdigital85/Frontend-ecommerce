@@ -58,7 +58,7 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
             price: item.productId.price,
             discountPercentage: item.productId.discountPercentage,
             discountedPrice: item.productId.discountedPrice,
-            imageUrl: item.productId.imageUrl,
+            imageUrl: item.productId.images?.[0] ?? "",
             description: item.productId.description,
             stock: item.productId.stock,
             quantity: item.quantity,

@@ -48,10 +48,12 @@ const DetailProduct = () => {
   const originalPrice = product?.price || 0;
   const finalPrice = product?.discountedPrice || originalPrice;
 
-  // Mock images array (in real app, product would have multiple images)
-  const productImages = product
-    ? [product.imageUrl, product.imageUrl, product.imageUrl]
-    : [];
+  const productImages = product?.images ?? [];
+
+  const getYouTubeEmbedUrl = (url: string) => {
+    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+    return match ? `https://www.youtube.com/embed/${match[1]}` : null;
+  };
 
   if (productLoading) {
     return (
@@ -144,6 +146,29 @@ const DetailProduct = () => {
               </button>
             ))}
           </div>
+
+          {/* Video Player */}
+          {product.videoUrl && product.videoUrl !== "null" && product.videoUrl.trim() !== "" && (
+            <div className="rounded-2xl overflow-hidden shadow-lg border border-gray-100">
+              {product.videoSource === "youtube" ? (
+                getYouTubeEmbedUrl(product.videoUrl) && (
+                  <iframe
+                    src={getYouTubeEmbedUrl(product.videoUrl)!}
+                    title="Product video"
+                    className="w-full aspect-video"
+                    allowFullScreen
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  />
+                )
+              ) : (
+                <video
+                  src={product.videoUrl}
+                  controls
+                  className="w-full aspect-video bg-black"
+                />
+              )}
+            </div>
+          )}
         </div>
 
         {/* Product Details */}

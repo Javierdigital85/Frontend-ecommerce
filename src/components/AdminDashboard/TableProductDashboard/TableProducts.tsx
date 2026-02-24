@@ -172,9 +172,9 @@ const TableProducts = ({ products }: TableProductsProps) => {
               <td className="hidden xl:table-cell max-w-[200px]">
                 <div
                   className="truncate text-gray-600 text-sm"
-                  title={product.imageUrl}
+                  title={product.images?.[0] ?? ""}
                 >
-                  {product.imageUrl}
+                  {product.images?.[0] ?? ""}
                 </div>
               </td>
               <td className="text-center">
