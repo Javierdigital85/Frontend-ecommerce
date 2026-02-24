@@ -76,7 +76,7 @@ const ModalCart = () => {
                 >
                   <img
                     className="w-24 h-24 object-cover rounded-lg border-2 border-white shadow-sm"
-                    src={item.imageUrl}
+                    src={item.images[0] ?? ""}
                     alt={item.name}
                   />
                   <div className="flex-1 flex flex-col justify-between min-w-0">

@@ -28,7 +28,7 @@ const CardProduct = ({ product }: CardProductProps) => {
         _id,
         name,
         price: discountedPrice || price,
-        imageUrl: images?.[0] ?? "",
+        images: images ?? [],
         description,
         stock,
         quantity: 1,

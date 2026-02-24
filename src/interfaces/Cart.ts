@@ -10,16 +10,19 @@ export interface Product {
   images: string[];
 }
 
-// CartItem for frontend use — imageUrl is a snapshot of images[0]
 export interface CartItem {
   _id: string;
   name: string;
+  name_es?: string;
   description: string;
+  description_es?: string;
   price: number;
   discountPercentage?: number;
   discountedPrice?: number;
   stock: number;
-  imageUrl: string;
+  images: string[];
+  videoUrl?: string | null;
+  videoSource?: "cloudinary" | "youtube" | null;
   quantity: number;
 }
 

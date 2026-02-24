@@ -500,7 +500,7 @@ const Checkout = () => {
                 >
                   <div className="flex items-start gap-3 flex-1">
                     <img
-                      src={item.imageUrl}
+                      src={item.images[0] ?? ""}
                       alt={item.name}
                       className="w-16 h-16 object-cover rounded-lg border border-gray-200"
                     />
