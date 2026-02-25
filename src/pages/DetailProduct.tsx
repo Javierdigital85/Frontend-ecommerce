@@ -111,11 +111,11 @@ const DetailProduct = () => {
         {/* Image Gallery */}
         <div className="space-y-4">
           {/* Main Image */}
-          <div className="relative bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 aspect-square">
+          <div className="relative bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 aspect-square flex items-center justify-center">
             <img
               src={productImages[selectedImage]}
               alt={product.name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
             {discountPercentage > 0 && (
               <div className="absolute top-4 left-4">
@@ -172,7 +172,7 @@ const DetailProduct = () => {
         </div>
 
         {/* Product Details */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 lg:sticky lg:top-20 lg:self-start lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto">
           {/* Title and Rating */}
           <div>
             <h1 className="text-3xl lg:text-4xl font-bold mb-3 text-gray-900 leading-tight">
