@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllSlides } from "../../services/carouselService";
-import { ICarousel } from "../../interfaces/Carousel";
+import type { ICarousel } from "../../interfaces/Carousel";
 
 const Carousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
