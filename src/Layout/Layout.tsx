@@ -1,11 +1,13 @@
 import { Outlet } from "react-router";
 import Navbar from "../components/Navbar/Navbar";
 import ChatWidget from "../components/Chat/ChatWidget";
+import Carousel from "../components/Carousel/Carousel";
 
 const Layout = () => {
   return (
     <div className="w-full relative">
       <Navbar />
+      <Carousel/>
       <main className="max-w-[1400px] mx-auto px-6 pb-10">
         <Outlet />
       </main>

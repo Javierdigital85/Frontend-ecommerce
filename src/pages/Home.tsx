@@ -1,12 +1,14 @@
 import { useState } from "react";
 import CardProduct from "../components/CardProduct/CardProduct";
 import { useProduct } from "../context/useProduct";
-import { FiSearch, FiFilter } from "react-icons/fi";
+import { FiFilter } from "react-icons/fi";
 import { useTranslation } from "../hook/useTranslation";
+import { useSearch } from "../context/useSearch";
 
 const Home = () => {
   const { products, productsLoading, error } = useProduct();
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [searchTerm, setSearchTerm] = useState("");
+  const { searchTerm } = useSearch();
   const [sortBy, setSortBy] = useState("default");
   const { t } = useTranslation();
 
@@ -35,39 +37,6 @@ const Home = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-600 via-blue-800 to-indigo-800 text-white rounded-2xl overflow-hidden mb-8 mt-6">
-        <div className="absolute inset-0 bg-black/10"></div>
-        <div className="relative px-6 py-16 md:py-24 lg:py-10">
-          <div className="max-w-5xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight">
-              {t.hero.title}
-            </h1>
-            <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              {t.hero.subtitle}
-            </p>
-
-            {/* Search Bar in Hero */}
-            <div className="max-w-2xl mx-auto">
-              <div className="relative">
-                <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
-                <input
-                  type="text"
-                  placeholder={t.searchPlaceholder}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-lg text-base md:text-lg"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Decorative Elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-32 translate-x-32"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full translate-y-48 -translate-x-48"></div>
-      </section>
-
       {/* Filters Section */}
       <div className="mb-8">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-gray-100">

@@ -15,3 +15,10 @@ export const uploadVideo = async (file: File) => {
   const response = await axios.post(`${UPLOAD_URL}/video`, formData);
   return response.data.url;
 };
+
+export const uploadCarouselImage = async (file: File) => {
+  const formData = new FormData();
+  formData.append("image", file);
+  const response = await axios.post(`${UPLOAD_URL}/carousel`, formData);
+  return response.data.url;
+};

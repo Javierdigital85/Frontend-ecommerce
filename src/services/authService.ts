@@ -31,7 +31,6 @@ export const loginService = async (
 ) => {
   try {
     const response = await axios.post(`${API_URL}/login`, data, {
-      headers: { "Content-Type": "application/json" },
       withCredentials: true,
     });
 
@@ -61,7 +60,6 @@ export const registerService = async (
 ) => {
   try {
     const response = await axios.post(`${API_URL}/register`, data, {
-      headers: { "Content-Type": "application/json" },
       withCredentials: true,
     });
     console.log("Respuesta", response);
@@ -103,7 +101,6 @@ export const updateUserService = async (
 ) => {
   try {
     const res = await axios.put(`${API_URL}/updateUser/${userId}`, userData, {
-      headers: { "Content-Type": "application/json" },
       withCredentials: true,
     });
     return res.data;

@@ -17,41 +17,47 @@ import PaymentPending from "./pages/PaymentPending";
 import Profile from "./pages/Profile";
 import Orders from "./pages/Orders";
 import { LanguageProvider } from "./context/LanguageContext";
+import { SearchProvider } from "./context/SearchContext";
 
 function App() {
   return (
-    <LanguageProvider>
-      <UserContextProvider>
-        <ProductContextProvider>
-          <CartContextProvider>
-            <Routes>
-              <Route element={<Layout />}>
-                <Route path="/" element={<Home />}></Route>
-                <Route path="/register" element={<Register />}></Route>
-                <Route path="/login" element={<Login />}></Route>
-                <Route path="/profile" element={<Profile />}></Route>
-                <Route path="/detailProduct/:id" element={<DetailProduct />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/orders" element={<Orders />} />
-                <Route path="/payment/success" element={<PaymentSuccess />} />
-                <Route path="/payment/failure" element={<PaymentFailure />} />
-                <Route path="/payment/pending" element={<PaymentPending />} />
-              </Route>
+    <SearchProvider>
+      <LanguageProvider>
+        <UserContextProvider>
+          <ProductContextProvider>
+            <CartContextProvider>
+              <Routes>
+                <Route element={<Layout />}>
+                  <Route path="/" element={<Home />}></Route>
+                  <Route path="/register" element={<Register />}></Route>
+                  <Route path="/login" element={<Login />}></Route>
+                  <Route path="/profile" element={<Profile />}></Route>
+                  <Route
+                    path="/detailProduct/:id"
+                    element={<DetailProduct />}
+                  />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/orders" element={<Orders />} />
+                  <Route path="/payment/success" element={<PaymentSuccess />} />
+                  <Route path="/payment/failure" element={<PaymentFailure />} />
+                  <Route path="/payment/pending" element={<PaymentPending />} />
+                </Route>
 
-              <Route
-                path="/admin/dashboard/*"
-                element={
-                  <ProtectedRoute>
-                    <AdminDashboard />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </CartContextProvider>
-        </ProductContextProvider>
-        <Toaster />
-      </UserContextProvider>
-    </LanguageProvider>
+                <Route
+                  path="/admin/dashboard/*"
+                  element={
+                    <ProtectedRoute>
+                      <AdminDashboard />
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+            </CartContextProvider>
+          </ProductContextProvider>
+          <Toaster />
+        </UserContextProvider>
+      </LanguageProvider>
+    </SearchProvider>
   );
 }
 

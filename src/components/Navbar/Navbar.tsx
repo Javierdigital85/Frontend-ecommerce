@@ -3,16 +3,19 @@ import Cart from "./Cart";
 import AuthButtons from "./AuthButtons";
 import UserDropDown from "./UserDropDown";
 import { useUser } from "../../context/useUser";
-import { FiMenu } from "react-icons/fi";
+import { FiMenu, FiSearch } from "react-icons/fi";
 import { useState } from "react";
 import { useLanguage } from "../../context/useLanguage";
 import { useTranslation } from "../../hook/useTranslation";
+import { useSearch } from "../../context/useSearch";
 
 const Navbar = () => {
   const { loading, userInfo } = useUser();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { language, toggleLanguage } = useLanguage();
   const { t } = useTranslation();
+
+  const { searchTerm, setSearchTerm } = useSearch();
 
   return (
     <header className="sticky top-0 z-50 bg-base-100 shadow">
@@ -21,6 +24,17 @@ const Navbar = () => {
           <Link className="btn btn-ghost text-xl" to="/">
             Musical Store
           </Link>
+        </div>
+
+        <div className="navbar-center flex relative items-center">
+          <FiSearch className="absolute left-3 text-gray-400" />
+          <input
+            type="text"
+            placeholder={t.searchProducts}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="bg-gray-100 rounded-full pl-10 pr-4 py-3 w-[700px] focus:ring-2 focus:ring-blue-400 focus:outline-none"
+          />
         </div>
 
         {/* Desktop Navigation */}
