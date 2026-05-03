@@ -54,7 +54,7 @@ function App() {
               </Routes>
             </CartContextProvider>
           </ProductContextProvider>
-          <Toaster />
+          <Toaster toastOptions={{ style: { maxWidth: "400px" } }} />
         </UserContextProvider>
       </LanguageProvider>
     </SearchProvider>

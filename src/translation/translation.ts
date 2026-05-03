@@ -186,7 +186,7 @@ export const translations = {
     alreadyHaveAccount: "Already have an account?",
     createAccount: "Create account",
     signIn: "Sign in",
-    loginMustBeLoggedIn: "You must be logged in to continue with the purchase",
+    loginMustBeLoggedIn: "Please sign in to complete your purchase",
     saveChanges: "Save changes",
     backToProducts: "Back to Products",
   },
