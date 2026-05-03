@@ -38,9 +38,6 @@ const Navbar = () => {
         {/* Right side */}
         <div className="ml-auto flex items-center gap-1 sm:gap-2 shrink-0">
           <div className="hidden md:flex items-center gap-2">
-            <Link className="btn btn-ghost btn-sm" to="/">
-              {t.home}
-            </Link>
             {isHome && (
             <div className="relative flex items-center">
               <FiSearch className="absolute left-3 text-gray-400 pointer-events-none" />
