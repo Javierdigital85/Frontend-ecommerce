@@ -1,13 +1,12 @@
 import { useForm } from "react-hook-form";
 import type { RegisterFormValues } from "../../interfaces/RegisterForm";
 import type { UserInfo } from "../../interfaces/User";
-// import { useUser } from "../../context/useUser";
 import { useEffect } from "react";
 import { updateUserService } from "../../services/authService";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
+import { useTranslation } from "../../hook/useTranslation";
 
-// podemos usar getUserId para obtener a un usuario!
 interface Props {
   userInfo: UserInfo | null;
   checkSession: () => Promise<void>;
@@ -15,132 +14,76 @@ interface Props {
 }
 
 const UserProfile = ({ userInfo, getUserId, checkSession }: Props) => {
-  // const { userInfo, checkSession, getUserId } = useUser();
-  console.log("userInfooooooooooo", userInfo);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<RegisterFormValues>({
-    mode: "onChange",
-  });
-
+  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<RegisterFormValues>({ mode: "onChange" });
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    if (userInfo) reset({ username: userInfo.username || "", email: userInfo.email || "" });
+  }, [userInfo, reset]);
 
   const onSubmit = async (data: RegisterFormValues) => {
     try {
       const userId = getUserId();
-      if (!userId) {
-        toast.error("No se pudo obtener el ID del usuario");
-        return;
-      }
-
-      const userData = {
-        username: data.username,
-        email: data.email,
-      };
-
-      console.log("Datos a enviar:", userData);
-      console.log("User ID:", userId);
-
-      const res = await updateUserService(userId, userData);
-      toast.success(res.message || "Perfil actualizado correctamente");
-      await checkSession(); // Actualiza el contexto con los nuevos datos
+      if (!userId) { toast.error(t.logoutError); return; }
+      const res = await updateUserService(userId, { username: data.username, email: data.email });
+      toast.success(res.message || t.registerSuccess);
+      await checkSession();
       navigate("/");
-    } catch (error) {
-      console.error("Error:", error);
-      toast.error("Error al actualizar el perfil");
+    } catch {
+      toast.error(t.registerError);
     }
   };
 
-  useEffect(() => {
-    console.log("userInfo recibido:", userInfo);
-    if (userInfo) {
-      reset({
-        username: userInfo.username || "",
-        email: userInfo.email || "",
-      });
-    }
-  }, [userInfo, reset]);
-
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      action=""
-      className="mt-8 flex flex-col gap-4 lg:gap6 max-w-[500px] mx-auto"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+      {/* Username */}
       <div>
-        <h1 className="text-center">Edit Profile</h1>
-        {/* name */}
+        <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.usernamePlaceholder}</label>
         <input
           {...register("username", {
-            required: "El nombre es requerido",
-            pattern: {
-              value: /^[a-zA-Z\s]+$/,
-              message: "Nombre invalido",
-            },
-            minLength: {
-              value: 2,
-              message: "minimo 2 caracteres",
-            },
-            maxLength: {
-              value: 30,
-              message: "Maximo 30 caracteres",
-            },
+            required: t.usernameRequired,
+            minLength: { value: 2, message: t.usernameMinLength },
+            maxLength: { value: 30, message: t.usernameMaxLength },
           })}
           type="text"
-          placeholder="name"
-          className={`p-2 outline-2 rounded border focus:outline-primary w-full ${
-            errors.username
-              ? "border-red-500 outline-red-500 focus:outline-red-500"
-              : ""
+          className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-colors text-sm ${
+            errors.username ? "border-red-400 bg-red-50" : "border-gray-200 focus:border-blue-500 bg-gray-50 focus:bg-white"
           }`}
         />
-        {errors.username && (
-          <p className="text-red-500 text-sm mt-2 ml-1">
-            {errors.username.message}
-          </p>
-        )}
+        {errors.username && <p className="text-red-500 text-xs mt-1.5 ml-1">⚠ {errors.username.message}</p>}
       </div>
+
+      {/* Email */}
       <div>
-        {/* email */}
+        <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.emailPlaceholder}</label>
         <input
           {...register("email", {
-            required: "El nombre es requerido",
-            pattern: {
-              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-              message: "Email invalido",
-            },
-            minLength: {
-              value: 6,
-              message: "minimo de 6 caracteres",
-            },
-            maxLength: {
-              value: 254,
-              message: "maximo de 254 caracteres",
-            },
+            required: t.emailRequired,
+            pattern: { value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: t.emailInvalid },
+            minLength: { value: 6, message: t.emailMinLength },
+            maxLength: { value: 254, message: t.emailMaxLength },
           })}
           autoComplete="email"
           type="email"
-          placeholder="Email"
-          className={`p-2 outline-2 rounded border focus:outline-primary w-full ${
-            errors.email
-              ? "border-red-500 outline-red-500 focus:outline-red-500"
-              : ""
+          className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-colors text-sm ${
+            errors.email ? "border-red-400 bg-red-50" : "border-gray-200 focus:border-blue-500 bg-gray-50 focus:bg-white"
           }`}
         />
-        {errors.email && (
-          <p className="text-red-500 text-sm mt-2 ml-1">
-            {errors.email.message as string}
-          </p>
-        )}
+        {errors.email && <p className="text-red-500 text-xs mt-1.5 ml-1">⚠ {errors.email.message as string}</p>}
       </div>
+
       <button
-        className="btn bg-purple-600 hover:bg-purple-700 text-white"
         type="submit"
+        disabled={isSubmitting}
+        className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg mt-1"
       >
-        Update user profile
+        {isSubmitting ? (
+          <span className="flex items-center justify-center gap-2">
+            <span className="loading loading-spinner loading-sm"></span>
+            {t.creatingAccount}
+          </span>
+        ) : t.saveChanges}
       </button>
     </form>
   );

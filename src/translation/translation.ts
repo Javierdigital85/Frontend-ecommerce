@@ -187,6 +187,7 @@ export const translations = {
     createAccount: "Create account",
     signIn: "Sign in",
     loginMustBeLoggedIn: "You must be logged in to continue with the purchase",
+    saveChanges: "Save changes",
   },
   es: {
     // Navbar
@@ -377,5 +378,6 @@ export const translations = {
     createAccount: "Crear cuenta",
     signIn: "Iniciar sesión",
     loginMustBeLoggedIn: "Debes iniciar sesión para continuar con la compra",
+    saveChanges: "Guardar cambios",
   },
 };
