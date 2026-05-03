@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from "react-router";
-import { FiPackage, FiUsers, FiArrowLeft, FiMenu, FiX } from "react-icons/fi";
+import { FiPackage, FiUsers, FiArrowLeft, FiMenu, FiX, FiHome } from "react-icons/fi";
 import { useState } from "react";
 import UserDropDown from "../components/Navbar/UserDropDown";
 import { useUser } from "../context/useUser";
@@ -67,7 +67,7 @@ const DashboardLayout = () => {
             to="/"
             className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all"
           >
-            <FiArrowLeft size={16} />
+            <FiHome size={16} />
             {t.backToStore}
           </Link>
         </div>
@@ -88,10 +88,17 @@ const DashboardLayout = () => {
           </div>
           <div className="flex items-center gap-2">
             <Link
-              to="/"
+              to="/admin/dashboard/products"
               className="hidden md:flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors"
             >
               <FiArrowLeft size={15} />
+              {t.backToProducts}
+            </Link>
+            <Link
+              to="/"
+              className="hidden md:flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors"
+            >
+              <FiHome size={15} />
               {t.backToStore}
             </Link>
             <button
