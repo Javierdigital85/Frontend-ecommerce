@@ -4,6 +4,7 @@ import { useProduct } from "../context/useProduct";
 import { FiFilter } from "react-icons/fi";
 import { useTranslation } from "../hook/useTranslation";
 import { useSearch } from "../context/useSearch";
+import Carousel from "../components/Carousel/Carousel";
 
 const Home = () => {
   const { products, productsLoading, error } = useProduct();
@@ -37,6 +38,9 @@ const Home = () => {
 
   return (
     <div className="min-h-screen">
+      <div className="relative left-1/2 -translate-x-1/2 w-screen mb-8">
+        <Carousel />
+      </div>
       {/* Filters Section */}
       <div className="mb-8">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-gray-100">

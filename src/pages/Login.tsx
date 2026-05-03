@@ -2,7 +2,7 @@ import LoginForm from "../components/Login/LoginForm";
 
 const Login = () => {
   return (
-    <div className="min-h-[calc(100vh-80px)] flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
+    <div className="relative left-1/2 -translate-x-1/2 w-screen min-h-[calc(100vh-80px)] flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
       <div className="w-full max-w-md">
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8 md:p-10">
