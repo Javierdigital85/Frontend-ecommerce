@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Cart from "./Cart";
 import AuthButtons from "./AuthButtons";
 import UserDropDown from "./UserDropDown";
@@ -24,6 +24,8 @@ const Navbar = () => {
   const { t } = useTranslation();
 
   const { searchTerm, setSearchTerm } = useSearch();
+  const location = useLocation();
+  const isHome = location.pathname === "/";
 
   return (
     <header className="sticky top-0 z-50 bg-base-100 shadow">
@@ -39,6 +41,7 @@ const Navbar = () => {
             <Link className="btn btn-ghost btn-sm" to="/">
               {t.home}
             </Link>
+            {isHome && (
             <div className="relative flex items-center">
               <FiSearch className="absolute left-3 text-gray-400 pointer-events-none" />
               <input
@@ -49,6 +52,7 @@ const Navbar = () => {
                 className="bg-gray-100 rounded-full pl-10 pr-4 py-2 w-64 focus:ring-2 focus:ring-blue-400 focus:outline-none"
               />
             </div>
+            )}
             {userInfo?.isAdmin && (
               <Link className="btn btn-info btn-sm hover:text-white" to="/admin/dashboard/products">
                 {t.dashboard}
@@ -75,6 +79,7 @@ const Navbar = () => {
       </nav>
 
       {/* Mobile search bar */}
+      {isHome && (
       <div className="md:hidden px-4 pb-3 bg-base-100">
         <div className="relative flex items-center">
           <FiSearch className="absolute left-3 text-gray-400 pointer-events-none" />
@@ -87,6 +92,7 @@ const Navbar = () => {
           />
         </div>
       </div>
+      )}
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
