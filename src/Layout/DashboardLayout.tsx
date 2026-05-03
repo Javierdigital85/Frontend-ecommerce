@@ -1,14 +1,19 @@
 import { Outlet, Link, useLocation } from "react-router";
-import { FiPackage, FiUsers } from "react-icons/fi";
+import { FiPackage, FiUsers, FiArrowLeft, FiMenu, FiX } from "react-icons/fi";
 import { useState } from "react";
 import UserDropDown from "../components/Navbar/UserDropDown";
 import { useUser } from "../context/useUser";
 import { useTranslation } from "../hook/useTranslation";
 import { useLanguage } from "../context/useLanguage";
 
+const navItems = (t: ReturnType<typeof useTranslation>["t"]) => [
+  { to: "/admin/dashboard/products", icon: <FiPackage size={18} />, label: t.products },
+  { to: "/admin/dashboard/users", icon: <FiUsers size={18} />, label: t.usersTitle },
+];
+
 const DashboardLayout = () => {
   const location = useLocation();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { userInfo, loading } = useUser();
   const { t } = useTranslation();
   const { language, toggleLanguage } = useLanguage();
@@ -16,108 +21,87 @@ const DashboardLayout = () => {
   const isActive = (path: string) => location.pathname.includes(path);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-      {/* Top Navigation Bar */}
-      <nav className="bg-white shadow-lg sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Mobile top bar */}
-          <div className="flex md:hidden items-center justify-between py-3">
-            <span className="font-bold text-gray-800">{t.adminDashboard}</span>
-            <div className="flex items-center gap-2">
-              <button
-                className="btn btn-ghost btn-sm bg-green-100 p-2"
-                onClick={toggleLanguage}
-              >
-                {language === "en" ? "🇺🇸 en" : "🇦🇷 es"}
-              </button>
-              <button
-                onClick={() => setMobileMenuOpen((prev) => !prev)}
-                className="p-2 rounded-lg text-gray-700 hover:bg-gray-100"
-              >
-                <div className="w-6 flex flex-col gap-1.5">
-                  <span
-                    className={`block h-0.5 bg-gray-700 transition-all duration-300 origin-center ${mobileMenuOpen ? "rotate-45 translate-y-2" : ""}`}
-                  ></span>
-                  <span
-                    className={`block h-0.5 bg-gray-700 transition-all duration-300 ${mobileMenuOpen ? "opacity-0 scale-x-0" : ""}`}
-                  ></span>
-                  <span
-                    className={`block h-0.5 bg-gray-700 transition-all duration-300 origin-center ${mobileMenuOpen ? "-rotate-45 -translate-y-2" : ""}`}
-                  ></span>
-                </div>
-              </button>
-            </div>
-          </div>
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center justify-between py-3">
-            <Link
-              to="/"
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition-all"
-            >
-              {t.backToStore}
-            </Link>
-            <div className="flex items-center gap-2">
-              <Link
-                to="/admin/dashboard/products"
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all ${isActive("/products") ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-blue-50"}`}
-              >
-                <FiPackage className="text-lg" />
-                {t.products}
-              </Link>
-              <Link
-                to="/admin/dashboard/users"
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all ${isActive("/users") ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-blue-50"}`}
-              >
-                <FiUsers className="text-lg" />
-                {t.usersTitle}
-              </Link>
-              <button
-                className="btn btn-ghost btn-sm bg-green-100 p-2"
-                onClick={toggleLanguage}
-              >
-                {language === "en" ? "🇺🇸 en" : "🇦🇷 es"}
-              </button>
-              {!loading && userInfo?.id && <UserDropDown />}
-            </div>
-          </div>
+    <div className="min-h-screen flex bg-slate-100">
+      {/* Sidebar overlay (mobile) */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
-          {/* Mobile Navigation */}
-          {mobileMenuOpen && (
-            <div className="md:hidden py-4 border-t border-gray-200">
-              <div className="flex flex-col gap-2">
-                <Link
-                  to="/admin/dashboard/products"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-2 px-4 py-3 rounded-lg font-semibold transition-all ${isActive("/products") ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-blue-50"}`}
-                >
-                  <FiPackage className="text-lg" />
-                  {t.products}
-                </Link>
-                <Link
-                  to="/admin/dashboard/users"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-2 px-4 py-3 rounded-lg font-semibold transition-all ${isActive("/users") ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-blue-50"}`}
-                >
-                  <FiUsers className="text-lg" />
-                  {t.usersTitle}
-                </Link>
-                <Link
-                  to="/"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-3 rounded-lg font-semibold text-gray-700 hover:bg-gray-100 transition-all"
-                >
-                  {t.backToStore}
-                </Link>
-              </div>
-            </div>
-          )}
+      {/* Sidebar */}
+      <aside
+        className={`fixed top-0 left-0 h-screen w-64 bg-slate-900 text-white z-40 flex flex-col transition-transform duration-300
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:sticky md:top-0 md:translate-x-0 md:flex md:self-start md:h-screen`}
+      >
+        {/* Logo */}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-700">
+          <span className="text-lg font-bold tracking-tight">⚙ Admin</span>
+          <button className="md:hidden text-slate-400 hover:text-white" onClick={() => setSidebarOpen(false)}>
+            <FiX size={20} />
+          </button>
         </div>
-      </nav>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Outlet />
-      </main>
+        {/* Nav */}
+        <nav className="flex-1 px-3 py-4 space-y-1">
+          {navItems(t).map(({ to, icon, label }) => (
+            <Link
+              key={to}
+              to={to}
+              onClick={() => setSidebarOpen(false)}
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-all text-sm
+                ${isActive(to)
+                  ? "bg-blue-600 text-white shadow"
+                  : "text-slate-300 hover:bg-slate-800 hover:text-white"}`}
+            >
+              {icon}
+              {label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Back to store */}
+        <div className="px-3 py-4 border-t border-slate-700">
+          <Link
+            to="/"
+            className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all"
+          >
+            <FiArrowLeft size={16} />
+            {t.backToStore}
+          </Link>
+        </div>
+      </aside>
+
+      {/* Main */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Topbar */}
+        <header className="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 flex items-center justify-between sticky top-0 z-20">
+          <div className="flex items-center gap-3">
+            <button
+              className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <FiMenu size={20} />
+            </button>
+            <h1 className="font-semibold text-slate-800 text-sm sm:text-base">{t.adminDashboard}</h1>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              className="btn btn-ghost btn-sm bg-green-50 border border-green-200 text-green-700 hover:bg-green-100 px-3"
+              onClick={toggleLanguage}
+            >
+              {language === "en" ? "🇺🇸 EN" : "🇦🇷 ES"}
+            </button>
+            {!loading && userInfo?.id && <UserDropDown />}
+          </div>
+        </header>
+
+        {/* Content */}
+        <main className="flex-1 px-4 sm:px-6 lg:px-8 py-6">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };

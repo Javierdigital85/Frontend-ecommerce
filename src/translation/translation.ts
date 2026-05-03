@@ -174,6 +174,19 @@ export const translations = {
     imageUrlRequired: "Image URL is required",
     enterProductName: "Enter product name",
     enterProductDescription: "Enter product description",
+
+    // Login / Register pages
+    loginWelcome: "Welcome back",
+    loginSubtitle: "Sign in to your account to continue",
+    registerTitle: "Create account",
+    registerSubtitle: "It's free and takes less than a minute",
+    loggingIn: "Signing in...",
+    creatingAccount: "Creating account...",
+    noAccount: "Don't have an account?",
+    alreadyHaveAccount: "Already have an account?",
+    createAccount: "Create account",
+    signIn: "Sign in",
+    loginMustBeLoggedIn: "You must be logged in to continue with the purchase",
   },
   es: {
     // Navbar
@@ -351,5 +364,18 @@ export const translations = {
     imageUrlRequired: "La URL de imagen es requerida",
     enterProductName: "Ingresa el nombre del producto",
     enterProductDescription: "Ingresa la descripción del producto",
+
+    // Login / Register pages
+    loginWelcome: "Bienvenido de vuelta",
+    loginSubtitle: "Ingresá a tu cuenta para continuar",
+    registerTitle: "Crear cuenta",
+    registerSubtitle: "Es gratis y toma menos de un minuto",
+    loggingIn: "Ingresando...",
+    creatingAccount: "Creando cuenta...",
+    noAccount: "¿No tenés cuenta?",
+    alreadyHaveAccount: "¿Ya tenés cuenta?",
+    createAccount: "Crear cuenta",
+    signIn: "Iniciar sesión",
+    loginMustBeLoggedIn: "Debes iniciar sesión para continuar con la compra",
   },
 };

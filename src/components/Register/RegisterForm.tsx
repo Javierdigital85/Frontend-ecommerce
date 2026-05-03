@@ -99,7 +99,7 @@ const RegisterForm = () => {
             required: `${t.emailRequired}`,
             pattern: {
               value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-              message: "Correo electrónico inválido",
+              message: `${t.emailInvalid}`,
             },
             minLength: { value: 6, message: `${t.emailMinLength}` },
             maxLength: { value: 254, message: `${t.emailMaxLength}` },
@@ -162,7 +162,7 @@ const RegisterForm = () => {
         {isSubmitting ? (
           <span className="flex items-center justify-center gap-2">
             <span className="loading loading-spinner loading-sm"></span>
-            Creando cuenta...
+            {t.creatingAccount}
           </span>
         ) : (
           t.register
@@ -171,9 +171,9 @@ const RegisterForm = () => {
 
       {/* Link a Login */}
       <p className="text-center text-sm text-gray-500 mt-2">
-        ¿Ya tenés cuenta?{" "}
+        {t.alreadyHaveAccount}{" "}
         <Link to="/login" className="text-blue-600 font-semibold hover:underline">
-          Iniciar sesión
+          {t.signIn}
         </Link>
       </p>
     </form>

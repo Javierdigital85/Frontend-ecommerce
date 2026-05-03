@@ -5,7 +5,7 @@ import { useUser } from "../context/useUser";
 import { createOrder } from "../services/orderService";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
-
+import { useTranslation } from "../hook/useTranslation";
 import type { ShippingInfo } from "../interfaces/Order";
 
 const Checkout = () => {
@@ -13,11 +13,12 @@ const Checkout = () => {
   const { userInfo, isAuthenticated, loading: userLoading } = useUser();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
 
   // Verificar autenticación - redirigir a login si no está autenticado
   useEffect(() => {
     if (!userLoading && !isAuthenticated()) {
-      toast.error("Debes iniciar sesión para continuar con la compra");
+      toast.error(t.loginMustBeLoggedIn);
       // Guardar la ruta actual para redirigir después del login
       navigate("/login", { state: { from: "/checkout" } });
     }

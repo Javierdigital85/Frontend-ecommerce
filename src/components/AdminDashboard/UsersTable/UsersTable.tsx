@@ -1,4 +1,4 @@
-import { FiUser, FiShield } from "react-icons/fi";
+import { FiUser, FiShield, FiMail } from "react-icons/fi";
 import { useTranslation } from "../../../hook/useTranslation";
 
 interface User {
@@ -8,51 +8,61 @@ interface User {
   isAdmin: boolean;
 }
 
-interface UsersTableProps {
-  users: User[];
-}
-
-const UsersTable = ({ users }: UsersTableProps) => {
+const UsersTable = ({ users }: { users: User[] }) => {
   const { t } = useTranslation();
   return (
-    <div className="overflow-x-auto">
-      <table className="table w-full">
-        <thead className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
-          <tr>
-            <th>#</th>
-            <th>{t.usernamePlaceholder}</th>
-            <th>{t.emailPlaceholder}</th>
-            <th className="text-center">{t.role}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user, index) => (
-            <tr key={user._id} className="hover:bg-blue-50 transition-colors">
-              <td className="font-semibold text-gray-700">{index + 1}</td>
-              <td>
-                <div className="flex items-center gap-2">
-                  <FiUser className="text-gray-400" />
-                  <span className="font-bold text-gray-900">
-                    {user.username}
-                  </span>
-                </div>
-              </td>
-              <td className="text-gray-600">{user.email}</td>
-              <td className="text-center">
-                {user.isAdmin ? (
-                  <span className="inline-flex items-center justify-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">
-                    <FiShield /> {t.adminRole}
-                  </span>
-                ) : (
-                  <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-semibold">
-                    {t.userRole}
-                  </span>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold text-slate-800">{t.usersTitle}</h2>
+        <p className="text-slate-500 text-sm mt-0.5">{users.length} {t.usersTitle.toLowerCase()} {t.resultsFound}</p>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500">
+                <th className="px-4 py-3 text-center w-10">#</th>
+                <th className="px-4 py-3 text-left">{t.usernamePlaceholder}</th>
+                <th className="px-4 py-3 text-left hidden sm:table-cell">{t.emailPlaceholder}</th>
+                <th className="px-4 py-3 text-center">{t.role}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {users.map((user, index) => (
+                <tr key={user._id} className="hover:bg-slate-50 transition-colors">
+                  <td className="px-4 py-3 text-center text-slate-400 font-medium">{index + 1}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center shrink-0">
+                        <FiUser size={14} className="text-slate-500" />
+                      </div>
+                      <span className="font-semibold text-slate-800">{user.username}</span>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 hidden sm:table-cell">
+                    <div className="flex items-center gap-2 text-slate-500">
+                      <FiMail size={13} />
+                      {user.email}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    {user.isAdmin ? (
+                      <span className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1 rounded-full text-xs font-semibold">
+                        <FiShield size={11} /> {t.adminRole}
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 bg-slate-100 text-slate-600 border border-slate-200 px-3 py-1 rounded-full text-xs font-semibold">
+                        <FiUser size={11} /> {t.userRole}
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };

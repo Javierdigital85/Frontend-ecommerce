@@ -113,7 +113,7 @@ const LoginForm = () => {
         {isSubmitting ? (
           <span className="flex items-center justify-center gap-2">
             <span className="loading loading-spinner loading-sm"></span>
-            Ingresando...
+            {t.loggingIn}
           </span>
         ) : (
           t.loginButton
@@ -122,9 +122,9 @@ const LoginForm = () => {
 
       {/* Link a Register */}
       <p className="text-center text-sm text-gray-500 mt-2">
-        ¿No tenés cuenta?{" "}
+        {t.noAccount}{" "}
         <Link to="/register" className="text-blue-600 font-semibold hover:underline">
-          Crear cuenta
+          {t.createAccount}
         </Link>
       </p>
     </form>

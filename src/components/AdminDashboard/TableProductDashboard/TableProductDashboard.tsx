@@ -1,151 +1,90 @@
 import { Link } from "react-router";
 import { useProduct } from "../../../context/useProduct";
 import TableProducts from "./TableProducts";
-import {
-  FiPackage,
-  FiDollarSign,
-  FiTrendingDown,
-  FiPlus,
-  FiSearch,
-} from "react-icons/fi";
+import { FiPackage, FiDollarSign, FiTrendingDown, FiPlus, FiSearch, FiAlertCircle } from "react-icons/fi";
 import { useMemo, useState } from "react";
 import { useTranslation } from "../../../hook/useTranslation";
+
+const StatCard = ({
+  label, value, icon, color,
+}: {
+  label: string; value: string | number; icon: React.ReactNode; color: string;
+}) => (
+  <div className={`bg-white rounded-xl p-5 flex items-center gap-4 shadow-sm border border-slate-100`}>
+    <div className={`p-3 rounded-xl ${color}`}>{icon}</div>
+    <div>
+      <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">{label}</p>
+      <p className="text-2xl font-bold text-slate-800 mt-0.5">{value}</p>
+    </div>
+  </div>
+);
 
 const TableProductDashboard = () => {
   const { products, productsLoading } = useProduct();
   const [searchTerm, setSearchTerm] = useState("");
   const { t } = useTranslation();
 
-  // Calculate statistics
-  const stats = useMemo(() => {
-    const totalProducts = products.length;
-    const totalValue = products.reduce(
-      (sum, p) => sum + (p.discountedPrice || p.price) * p.stock,
-      0,
-    );
-    const productsWithDiscount = products.filter(
-      (p) => (p.discountPercentage ?? 0) > 0,
-    ).length;
-    const outOfStock = products.filter((p) => p.stock === 0).length;
-    return { totalProducts, totalValue, productsWithDiscount, outOfStock };
-  }, [products]);
+  const stats = useMemo(() => ({
+    totalProducts: products.length,
+    totalValue: products.reduce((sum, p) => sum + (p.discountedPrice || p.price) * p.stock, 0),
+    productsWithDiscount: products.filter((p) => (p.discountPercentage ?? 0) > 0).length,
+    outOfStock: products.filter((p) => p.stock === 0).length,
+  }), [products]);
 
   const filteredProducts = useMemo(() => {
     if (!searchTerm.trim()) return products;
-    return products.filter((product) =>
-      product.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()),
-    );
+    return products.filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
   }, [products, searchTerm]);
 
   return (
     <div className="space-y-6">
-      {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            {t.productManagement}
-          </h1>
-          <p className="text-gray-600 mt-1">
-            {t.productManagementDesc}
-          </p>
+          <h2 className="text-2xl font-bold text-slate-800">{t.productManagement}</h2>
+          <p className="text-slate-500 text-sm mt-0.5">{t.productManagementDesc}</p>
         </div>
-        <div className="flex flex-col">
-          <div className="relative">
+        <Link
+          to="/admin/dashboard/products/createProduct"
+          className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2.5 rounded-xl shadow transition-all text-sm"
+        >
+          <FiPlus size={16} />
+          {t.createProduct}
+        </Link>
+      </div>
+
+      {/* Stats */}
+      {!productsLoading && (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <StatCard label={t.totalProducts} value={stats.totalProducts} icon={<FiPackage size={20} className="text-blue-600" />} color="bg-blue-50" />
+          <StatCard label={t.inventoryValue} value={`$${stats.totalValue.toFixed(0)}`} icon={<FiDollarSign size={20} className="text-emerald-600" />} color="bg-emerald-50" />
+          <StatCard label={t.withDiscounts} value={stats.productsWithDiscount} icon={<FiTrendingDown size={20} className="text-amber-600" />} color="bg-amber-50" />
+          <StatCard label={t.outOfStock} value={stats.outOfStock} icon={<FiAlertCircle size={20} className="text-red-500" />} color="bg-red-50" />
+        </div>
+      )}
+
+      {/* Table card */}
+      <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+        {/* Search bar inside card */}
+        <div className="px-5 py-4 border-b border-slate-100 flex items-center gap-3">
+          <div className="relative flex-1 max-w-sm">
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={15} />
             <input
               type="text"
               placeholder={t.searchProducts}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="input input-bordered w-full md:w-[500px] pl-10"
+              className="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50"
             />
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
           </div>
           {searchTerm && (
-            <p className="text-sm text-gray-500 mt-1">
-              {filteredProducts.length} {t.resultsFound}
-            </p>
+            <span className="text-xs text-slate-500">{filteredProducts.length} {t.resultsFound}</span>
           )}
         </div>
-        <Link
-          to="/admin/dashboard/products/createProduct"
-          className="btn bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
-        >
-          <FiPlus className="text-lg" />
-          {t.createProduct}
-        </Link>
-      </div>
 
-      {/* Statistics Cards */}
-      {!productsLoading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-600">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 font-medium">
-                  {t.totalProducts}
-                </p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">
-                  {stats.totalProducts}
-                </p>
-              </div>
-              <div className="bg-blue-100 p-3 rounded-lg">
-                <FiPackage className="text-2xl text-blue-600" />
-              </div>
-            </div>
-          </div>
-          <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-600">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 font-medium">
-                  {t.inventoryValue}
-                </p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">
-                  ${stats.totalValue.toFixed(2)}
-                </p>
-              </div>
-              <div className="bg-green-100 p-3 rounded-lg">
-                <FiDollarSign className="text-2xl text-green-600" />
-              </div>
-            </div>
-          </div>
-          <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-orange-600">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 font-medium">
-                  {t.withDiscounts}
-                </p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">
-                  {stats.productsWithDiscount}
-                </p>
-              </div>
-              <div className="bg-orange-100 p-3 rounded-lg">
-                <FiTrendingDown className="text-2xl text-orange-600" />
-              </div>
-            </div>
-          </div>
-          <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-600">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 font-medium">
-                  {t.outOfStock}
-                </p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">
-                  {stats.outOfStock}
-                </p>
-              </div>
-              <div className="bg-red-100 p-3 rounded-lg">
-                <FiPackage className="text-2xl text-red-600" />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Products Table */}
-      <div className="bg-white rounded-xl shadow-md overflow-hidden">
         {productsLoading ? (
           <div className="flex justify-center items-center py-20">
-            <div className="loading loading-spinner loading-lg text-blue-600"></div>
+            <span className="loading loading-spinner loading-lg text-blue-600"></span>
           </div>
         ) : (
           <TableProducts products={filteredProducts} />
