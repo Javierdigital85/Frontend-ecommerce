@@ -87,6 +87,13 @@ const DashboardLayout = () => {
             <h1 className="font-semibold text-slate-800 text-sm sm:text-base">{t.adminDashboard}</h1>
           </div>
           <div className="flex items-center gap-2">
+            <Link
+              to="/"
+              className="hidden md:flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors"
+            >
+              <FiArrowLeft size={15} />
+              {t.backToStore}
+            </Link>
             <button
               className="btn btn-ghost btn-sm bg-green-50 border border-green-200 text-green-700 hover:bg-green-100 px-3"
               onClick={toggleLanguage}
