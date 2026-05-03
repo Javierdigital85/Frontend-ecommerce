@@ -207,7 +207,7 @@ const DetailProduct = () => {
               )}
               {product.stock > 0 && product.stock <= 5 && (
                 <div className="badge bg-orange-100 text-orange-700 border-0 px-3 py-3 font-semibold">
-                  {t.onlyLeft} {product.stock}!
+                  {t.onlyLeft} {product.stock} {t.onlyLeftSuffix}!
                 </div>
               )}
             </div>

@@ -4,7 +4,7 @@ import AuthButtons from "./AuthButtons";
 import UserDropDown from "./UserDropDown";
 import { useUser } from "../../context/useUser";
 import { FiMenu, FiSearch } from "react-icons/fi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLanguage } from "../../context/useLanguage";
 import { useTranslation } from "../../hook/useTranslation";
 import { useSearch } from "../../context/useSearch";
@@ -12,6 +12,14 @@ import { useSearch } from "../../context/useSearch";
 const Navbar = () => {
   const { loading, userInfo } = useUser();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) setMobileMenuOpen(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   const { language, toggleLanguage } = useLanguage();
   const { t } = useTranslation();
 
@@ -19,50 +27,44 @@ const Navbar = () => {
 
   return (
     <header className="sticky top-0 z-50 bg-base-100 shadow">
-      <nav className="navbar bg-base-100 shadow-sm lg:rounded-box w-full">
-        <div className="navbar-start">
-          <Link className="btn btn-ghost text-xl" to="/">
-            Musical Store
-          </Link>
-        </div>
+      <nav className="w-full px-2 sm:px-4 h-16 flex items-center gap-2">
+        {/* Logo */}
+        <Link className="btn btn-ghost text-lg sm:text-xl shrink-0 px-2" to="/">
+          Musical Store
+        </Link>
 
-        <div className="navbar-center flex relative items-center">
-          <FiSearch className="absolute left-3 text-gray-400" />
-          <input
-            type="text"
-            placeholder={t.searchProducts}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="bg-gray-100 rounded-full pl-10 pr-4 py-3 w-[700px] focus:ring-2 focus:ring-blue-400 focus:outline-none"
-          />
-        </div>
-
-        {/* Desktop Navigation */}
-        <div className="navbar-end gap-3">
-          <div className="hidden md:flex items-center gap-3">
+        {/* Right side */}
+        <div className="ml-auto flex items-center gap-1 sm:gap-2 shrink-0">
+          <div className="hidden md:flex items-center gap-2">
+            <Link className="btn btn-ghost btn-sm" to="/">
+              {t.home}
+            </Link>
+            <div className="relative flex items-center">
+              <FiSearch className="absolute left-3 text-gray-400 pointer-events-none" />
+              <input
+                type="text"
+                placeholder={t.searchProducts}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="bg-gray-100 rounded-full pl-10 pr-4 py-2 w-64 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              />
+            </div>
             {userInfo?.isAdmin && (
-              <Link
-                className="btn btn-info hover:text-white"
-                to="/admin/dashboard/products"
-              >
+              <Link className="btn btn-info btn-sm hover:text-white" to="/admin/dashboard/products">
                 {t.dashboard}
               </Link>
             )}
             {!loading && !userInfo?.id && <AuthButtons />}
           </div>
 
-          {/* User dropdown - siempre visible */}
           {!loading && userInfo?.id && <UserDropDown />}
 
           <Cart />
 
-          <button
-            className="btn btn-ghost btn-sm bg-green-100 p-2"
-            onClick={toggleLanguage}
-          >
-            {language === "en" ? "🇺🇸 en" : "🇦🇷 es"}
+          <button className="btn btn-ghost btn-sm bg-green-100 px-2" onClick={toggleLanguage}>
+            {language === "en" ? "🇺🇸" : "🇦🇷"}
           </button>
-          {/* Mobile Menu Button */}
+
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="btn btn-ghost btn-circle md:hidden"
@@ -72,7 +74,21 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Navigation Menu */}
+      {/* Mobile search bar */}
+      <div className="md:hidden px-4 pb-3 bg-base-100">
+        <div className="relative flex items-center">
+          <FiSearch className="absolute left-3 text-gray-400 pointer-events-none" />
+          <input
+            type="text"
+            placeholder={t.searchProducts}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="bg-gray-100 rounded-full pl-10 pr-4 py-2 w-full focus:ring-2 focus:ring-blue-400 focus:outline-none"
+          />
+        </div>
+      </div>
+
+      {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-base-100 shadow-lg border-t">
           <div className="flex flex-col gap-2 p-4">
@@ -82,7 +98,7 @@ const Navbar = () => {
                 onClick={() => setMobileMenuOpen(false)}
                 className="btn btn-info hover:text-white w-full"
               >
-                Dashboard
+                {t.dashboard}
               </Link>
             )}
             {!loading && !userInfo?.id && (

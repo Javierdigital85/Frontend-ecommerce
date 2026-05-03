@@ -43,6 +43,7 @@ export const translations = {
     inStock: "In Stock",
     outOfStock: "Out of Stock",
     onlyLeft: "Only",
+    onlyLeftSuffix: "left",
     available: "{count} available",
 
     // Detail Product
@@ -218,6 +219,7 @@ export const translations = {
     inStock: "En Stock",
     outOfStock: "Sin Stock",
     onlyLeft: "¡Solo quedan",
+    onlyLeftSuffix: "",
     available: "{count} disponibles",
 
     // Detail Product

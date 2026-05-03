@@ -63,7 +63,7 @@ const CardProduct = ({ product }: CardProductProps) => {
           )}
           {stock > 0 && stock <= 5 && (
             <span className="badge bg-orange-500 text-white font-semibold px-3 py-2 border-0">
-              {t.onlyLeft} {stock}!
+              {t.onlyLeft} {stock} {t.onlyLeftSuffix}!
             </span>
           )}
         </div>
